@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">#Search</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="m-2 btn btn-outline-info" aria-current="page" href="index.html">Google Search</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+
+          <div class="d-flex row justify-content-center">
+            <form class="d-flex row justify-content-center w-50" action="https://google.com/search">
+                <h2>
+                    Finde a Page with:
+                </h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">All these words:</label>
+                    <input type="text" class="form-control" placeholder="" name="as_q">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">This exact word or phrase...</label>
+                    <input type="text" class="form-control"name="as_epq">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Any of these words...</label>
+                    <input type="text" class="form-control" name="as_oq">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">None of these words...</label>
+                    <input type="text" class="form-control" name="as_eq">
+                </div>
+                <button type="submit" value="Google Search" class="btn btn-primary">Google Search</button>
+            </form>
+        </div>
+
+
+
+    </body>
+</html>
