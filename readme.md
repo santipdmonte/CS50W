@@ -1,7 +1,5 @@
 # CS50W (Web Programming with Python and JavaScript)
 
-![CS50W Logo](https://cs50.harvard.edu/web/2020/fall/assets/sites.jpg)
-
 ## Introduction
 
 Welcome to the CS50W repository! This repository contains the projects and code related to the Harvard University course CS50W - Web Programming with Python and JavaScript. CS50W is an intermediate-level course that delves into the essential concepts of web development, including HTML, CSS, JavaScript, Python, Flask, Django, SQL databases, scalability, security, and user experience.
