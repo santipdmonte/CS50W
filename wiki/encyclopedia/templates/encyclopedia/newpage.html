@@ -7,16 +7,18 @@
 {% block body %}
 
     <form action="{% url 'newpage' %}" method="post" class="p-5 w-75">
+        {% csrf_token %}
+        
         <div class="mb-3">
-            <label for="basic-url" class="form-label">Title</label>
-            <input type="text" class="form-control">
+            <label for="basic-url" class="form-label" >Title</label>
+            <input type="text" class="form-control" name="title">
             <div class="form-text" id="basic-addon4">Insert the title of the wiki page</div>
         </div>
 
         <div class="mb-3">
-            <label for="basic-url" class="form-label">Description</label>
-            <textarea type="text" class="form-control"></textarea>
-            <div class="form-text" id="basic-addon4">Insert the description of the wiki page (use markdown)</div>
+            <label for="basic-url" class="form-label">Content</label>
+            <textarea type="text" class="form-control"  name="content"></textarea>
+            <div class="form-text" id="basic-addon4">Insert the content of the wiki page (use markdown)</div>
         </div>
 
         <input type="submit" class="btn btn-primary">

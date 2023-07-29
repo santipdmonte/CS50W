@@ -44,7 +44,19 @@ def entry(request, title):
 
 def newpage(request):
     if request.method == 'POST':
-        print("BOCAAA")
+
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        # Validations ################################################
+
+        print(f"Saved. {title=} {content=}")
+        util.save_entry(title, content)
+
+        entries = util.list_entries()
+        return render(request, "encyclopedia/index.html", {
+            "entries": entries
+        })
 
     return render(request, "encyclopedia/newpage.html")
 
