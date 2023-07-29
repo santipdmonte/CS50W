@@ -1,0 +1,25 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia | New page
+{% endblock %}
+
+{% block body %}
+
+    <form action="{% url 'newpage' %}" method="post" class="p-5 w-75">
+        <div class="mb-3">
+            <label for="basic-url" class="form-label">Title</label>
+            <input type="text" class="form-control">
+            <div class="form-text" id="basic-addon4">Insert the title of the wiki page</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="basic-url" class="form-label">Description</label>
+            <textarea type="text" class="form-control"></textarea>
+            <div class="form-text" id="basic-addon4">Insert the description of the wiki page (use markdown)</div>
+        </div>
+
+        <input type="submit" class="btn btn-primary">
+    </form>
+
+{% endblock %}

@@ -31,8 +31,20 @@ def entry(request, title):
     description = util.get_entry(title)
     if description:
         desc_html = util.get_html(description)
+        return render(request, "encyclopedia/entry.html", {
+            "title": title,
+            "description": desc_html
+        })
+    
+    print("NOT TITLE FOUND")
+    entries = util.list_entries()
+    return render(request, "encyclopedia/index.html", {
+        "entries": entries
+        })
 
-    return render(request, "encyclopedia/entry.html", {
-        "title": title,
-        "description": desc_html
-    })
+def newpage(request):
+    if request.method == 'POST':
+        print("BOCAAA")
+
+    return render(request, "encyclopedia/newpage.html")
+
