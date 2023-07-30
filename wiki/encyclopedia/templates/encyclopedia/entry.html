@@ -6,6 +6,28 @@
 
 {% block body %}
 
-    {{ description|safe }}
+    {% if editing %}
+    <h2>{{ title }}</h2>
+
+    <form action="/{{ title }}" method="post">
+        {% csrf_token %}
+
+    <div class="mb-3 h-75">
+        <label for="basic-url" class="form-label">Editing content...</label>
+        <textarea type="text" class="form-control w-75" style="height: 70vh" name="new_content">{{ content }}</textarea>
+        <div class="form-text" id="basic-addon4">Edit the content of the wiki page (use markdown)</div>
+    </div>
+    <input type="hidden" name="save_edit" value="True">
+    <input type="submit" class="btn btn-primary" value="Save edit">
+    </form>
+    {%else%}
+    {{ cont_html|safe }}
+
+    <form action="/{{ title }}" method="post">
+        {% csrf_token %}
+
+        <input type="submit" value="Edit">
+    </form>
+    {% endif %}
 
 {% endblock %}
