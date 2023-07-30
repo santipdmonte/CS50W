@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from django.http import JsonResponse
+import random
 
 from . import util
 
@@ -8,22 +9,39 @@ def index(request):
     entries = util.list_entries()
 
     if request.method == 'POST':
-        title = request.POST.get('title')
-        content = util.get_entry(title)
+        form_type = request.POST.get('form_type')
+        if form_type == 'Search':
+            # The user enter a search form
+            title = request.POST.get('title')
+            content = util.get_entry(title)
 
-        # If true the title exists
-        if content:
-            cont_html = util.get_html(content)
-            return render(request, "encyclopedia/entry.html",{
-                "title": title,
-                "cont_html": cont_html
+            # If true the title exists
+            if content:
+                cont_html = util.get_html(content)
+                return render(request, "encyclopedia/entry.html",{
+                    "title": title,
+                    "cont_html": cont_html
+                })
+            
+            # Find similar titles
+            entries = [entry for entry in entries if title.lower() in entry.lower()] 
+            return render(request, "encyclopedia/index.html", {
+                "entries": entries
             })
-        
-        # Find similar titles
-        entries = [entry for entry in entries if title.lower() in entry.lower()] 
-        return render(request, "encyclopedia/index.html", {
-            "entries": entries
-        })
+        else:
+            # The user enter the random form
+            editing = False
+            title = random.choice(entries)
+            
+            content = util.get_entry(title)
+            cont_html = util.get_html(content)
+            return render(request, "encyclopedia/entry.html", {
+                "title": title,
+                "cont_html": cont_html,
+                "content": content,
+                "editing": editing
+            })
+
         
     return render(request, "encyclopedia/index.html", {
         "entries": entries
@@ -44,7 +62,6 @@ def entry(request, title):
     content = util.get_entry(title)
     if content:
         cont_html = util.get_html(content)
-        print(f"{cont_html=}")
         return render(request, "encyclopedia/entry.html", {
             "title": title,
             "cont_html": cont_html,
@@ -79,4 +96,6 @@ def newpage(request):
         })
 
     return render(request, "encyclopedia/newpage.html")
+
+
 
