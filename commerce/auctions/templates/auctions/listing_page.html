@@ -3,6 +3,22 @@
 {% block body %}
     <h2>Active Listings</h2>
 
+    {% if user.id == listing.owner.id %}
+        <form action="">
+            <input type="submit" class="btn btn-danger" value="Close bid">
+        </form>
+    {% endif %}
+
+    {% if user.id == listing.winner.id and listing.active == True %}
+        <div class="alert alert-success" role="alert">
+            You are winning the bid
+        </div>
+    {% elif user.id == listing.winner.id and  listing.active == False%}
+        <div class="alert alert-success" role="alert">
+            You are winning the bid
+        </div>
+    {% endif %}
+
     <div class="d-flex">
         <div class="card m-2" style="width: 18rem;">
             <img src="{{ listing.image_url }}" class="card-img-top" alt="...">
@@ -15,8 +31,24 @@
                 <p><s>${{ listing.starting_bid }}</s></p> 
                 <p><b>Current bid: </b>${{ listing.actual_bid }}</p>
                 {% endif %}
-                <a href="#" class="btn btn-primary">TODO: Bottons</a>
             </div>
             </div>
     </div>
+
+    {% if user.is_authenticated%}
+    <form action="">
+        <input class="btn btn-secondary" type="button" value="Add to watchlist">
+    </form>
+    <form action="">
+        <!-- Validate all the inputs in server -->
+        <input class="" type="number" value="" min="{{ listing.actual_bid }}"> 
+        <input type="submit" value="make bid">
+    </form>
+    <form action="">
+        <label for="">Comment: </label>
+        <input class="" type="text" placeholder="Comment..."> 
+        <input type="submit" value="Comment.">
+    </form>
+    {% endif %}   
+
 {% endblock %}
