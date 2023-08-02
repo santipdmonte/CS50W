@@ -1,6 +1,3 @@
 #Flask
 
-A python framework
-
-
-
+A python framework.

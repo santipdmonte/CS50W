@@ -75,13 +75,12 @@ def entry(request, title):
         "entries": entries,
         })
 
-def newpage(request):
+def new_page(request):
     if request.method == 'POST':
 
-        title = request.POST.get('title')
+        title = request.POST.get('title').capitalize()
         content = request.POST.get('content')
 
-        # Validation
         cont_validation = util.get_entry(title)
         if cont_validation:
             error_message = "Exists a page with this title"
@@ -95,7 +94,7 @@ def newpage(request):
             "entries": entries
         })
 
-    return render(request, "encyclopedia/newpage.html")
+    return render(request, "encyclopedia/new_page.html")
 
 
 
