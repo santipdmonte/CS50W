@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <div class="d-flex">
+        <div class="card m-2" style="width: 18rem;">
+            <img src="{{ listing.image_url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ listing.title }}</h5>
+                <p class="card-text">{{ listing.description }}</p>
+                {% if listing.starting_bid == listing.actual_bid %}
+                <p><b>Starting bid: </b>${{ listing.starting_bid }}</p>
+                {% else %}
+                <p><s>${{ listing.starting_bid }}</s></p> 
+                <p><b>Current bid: </b>${{ listing.actual_bid }}</p>
+                {% endif %}
+                <a href="#" class="btn btn-primary">TODO: Bottons</a>
+            </div>
+            </div>
+    </div>
+{% endblock %}

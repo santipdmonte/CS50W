@@ -6,6 +6,8 @@ from django.urls import reverse
 
 from .models import User, Category, Auction_listing, Bid, Comment
 
+import utils
+
 
 def index(request):
     return render(request, "auctions/index.html",{
@@ -63,3 +65,13 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+    
+def listing_page(request, id):
+    item = Auction_listing.objects.filter(id = id)
+    print(item)
+    if id:
+        return render(request, "auctions/listing_page.html",{
+            "listing": item.first()
+        })
+    return render(request, "auctions/inedx.html")
+

@@ -10,6 +10,12 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ item.title }}</h5>
                   <p class="card-text">{{ item.description }}</p>
+                  {% if item.starting_bid == item.actual_bid %}
+                  <p><b>Starting bid: </b>${{ item.starting_bid }}</p>
+                  {% else %}
+                  <p><s>${{ item.starting_bid }}</s></p> 
+                  <p><b>Current bid: </b>${{ item.actual_bid }}</p>
+                  {% endif %}
                   <a href="#" class="btn btn-primary">TODO: Bottons</a>
                 </div>
               </div>
