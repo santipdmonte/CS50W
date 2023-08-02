@@ -3,5 +3,16 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <div class="d-flex">
+        {% for item in listing %}
+            <div class="card m-2" style="width: 18rem;">
+                <img src="{{ item.image_url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.title }}</h5>
+                  <p class="card-text">{{ item.description }}</p>
+                  <a href="#" class="btn btn-primary">TODO: Bottons</a>
+                </div>
+              </div>
+        {% endfor %}
+    </div>
 {% endblock %}
