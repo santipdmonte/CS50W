@@ -16,9 +16,9 @@
                   <p><s>${{ item.starting_bid }}</s></p> 
                   <p><b>Current bid: </b>${{ item.actual_bid }}</p>
                   {% endif %}
-                  <a href="#" class="btn btn-primary">TODO: Bottons</a>
+                  <a href="{% url 'listing_page' id=item.id %}" class="btn btn-primary">TODO: Bottons</a>
                 </div>
-              </div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
