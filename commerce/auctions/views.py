@@ -69,40 +69,56 @@ def register(request):
 def listing_page(request, id):
     item = Auction_listing.objects.get(id = id)
     comments = Comment.objects.filter(listing = item)
-    print("Listing_page")
+    active_user = request.user
+    
+    whatchlist = active_user.whatchlist.all()
+    is_in_watchlist = False
+    if item in whatchlist:
+        is_in_watchlist = True
 
     if request.method == "POST":
-        print("ENTRO")
 
         type_form = request.POST["type_form"]
-        
 
-        if type_form == "new_bid":
+        if type_form == "add_watchlist":
+            try:
+                item_to_add = Auction_listing.objects.get(id=item.id)
+                active_user.whatchlist.add(item_to_add)
+                is_in_watchlist = True
+            except Exception as e:
+                print(e)
+
+        elif type_form == "remove_watchlist":
+            try:
+                item_to_remove = Auction_listing.objects.get(id=item.id)
+                print(f"{item_to_remove=}")
+                print(f"{active_user=}")
+                active_user.whatchlist.remove(item_to_remove)
+                is_in_watchlist = False
+            except Exception as e:
+                print(e)
+
+        elif type_form == "new_bid":
             new_amount_bid = request.POST["new_bid"]
             if int(new_amount_bid) <=  int(item.actual_bid):
                 return 404
             
             new_bid = Bid(
                     amount = new_amount_bid,
-                    bidder = request.user,
+                    bidder = active_user,
                     listing = item
                 )
             new_bid.save()
 
             item.actual_bid = new_amount_bid
-            item.winner = request.user
-
+            item.winner = active_user
             item.save()
 
-            return render(request, "auctions/listing_page.html",{
-                "listing": item,
-                "comments": comments
-            })
         elif type_form == "new_comment":
             new_comment = request.POST["new_comment"]
             comment = Comment(
                     comment = new_comment,
-                    commenter = request.user,
+                    commenter = active_user,
                     listing = item
                 )
             comment.save()
@@ -110,7 +126,8 @@ def listing_page(request, id):
     if id:
         return render(request, "auctions/listing_page.html",{
             "listing": item,
-            "comments": comments
+            "comments": comments,
+            "is_in_watchlist": is_in_watchlist
         })
     return render(request, "auctions/inedx.html")
 

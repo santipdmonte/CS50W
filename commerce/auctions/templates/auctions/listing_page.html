@@ -36,23 +36,35 @@
     </div>
 
     {% if user.is_authenticated%}
-    <form action="">
-        <input class="btn btn-secondary" type="button" value="Add to watchlist">
-    </form>
-    <form action="{% url 'listing_page' id=listing.id %}" method="post">
-        <!-- Validate all the inputs in server -->
-        {% csrf_token %}
-        <input type="hidden" value="new_bid" name="type_form">
-        <input class="" type="number" value="" min="{{ listing.actual_bid }}" name="new_bid"> 
-        <input type="submit" value="make bid">
-    </form>
-    <form action="{% url 'listing_page' id=listing.id %}" method="post">
-        {% csrf_token %}
-        <label for="">Comment: </label>
-        <input type="hidden" value="new_comment" name="type_form">
-        <input class="" type="text" placeholder="Comment..." name="new_comment"> 
-        <input type="submit" value="Comment.">
-    </form>
+
+        {% if is_in_watchlist %}
+            <form action="{% url 'listing_page' id=listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="remove_watchlist" name="type_form">
+                <input class="btn btn-secondary" type="submit" value="Remove to watchlist">
+            </form>
+        {% else %}  
+            <form action="{% url 'listing_page' id=listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="add_watchlist" name="type_form">
+                <input class="btn btn-secondary" type="submit" value="Add from watchlist">
+            </form>
+        {%  endif %}
+
+        <form action="{% url 'listing_page' id=listing.id %}" method="post">
+            <!-- Validate all the inputs in server -->
+            {% csrf_token %}
+            <input type="hidden" value="new_bid" name="type_form">
+            <input class="" type="number" value="" min="{{ listing.actual_bid }}" name="new_bid"> 
+            <input type="submit" value="make bid">
+        </form>
+        <form action="{% url 'listing_page' id=listing.id %}" method="post">
+            {% csrf_token %}
+            <label for="">Comment: </label>
+            <input type="hidden" value="new_comment" name="type_form">
+            <input class="" type="text" placeholder="Comment..." name="new_comment"> 
+            <input type="submit" value="Comment.">
+        </form>
     {% endif %}   
 
     {% for comment in comments %}
