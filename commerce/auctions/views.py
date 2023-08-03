@@ -10,12 +10,18 @@ import utils
 
 
 def index(request):
+    categories = Category.objects.all()
+    active_listing = Auction_listing.objects.filter(active = True)
+
     return render(request, "auctions/index.html",{
-        "listing": Auction_listing.objects.all()
+        "categories": categories,
+        "listing": active_listing
     })
 
 
 def login_view(request):
+    categories = Category.objects.all()
+    
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -29,6 +35,7 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "auctions/login.html", {
+                "categories": categories,
                 "message": "Invalid username and/or password."
             })
     else:
@@ -41,6 +48,8 @@ def logout_view(request):
 
 
 def register(request):
+    categories = Category.objects.all()
+
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -50,6 +59,7 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "auctions/register.html", {
+                "categories": categories,
                 "message": "Passwords must match."
             })
 
@@ -59,6 +69,7 @@ def register(request):
             user.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
+                "categories": categories,
                 "message": "Username already taken."
             })
         login(request, user)
@@ -68,6 +79,7 @@ def register(request):
     
 def listing_page(request, id):
     item = Auction_listing.objects.get(id = id)
+    categories = Category.objects.all()
     comments = Comment.objects.filter(listing = item)
     active_user = request.user
     
@@ -80,7 +92,14 @@ def listing_page(request, id):
 
         type_form = request.POST["type_form"]
 
-        if type_form == "add_watchlist":
+        if type_form == "close_bid":
+            try:
+                item.active = False
+                item.save()
+            except Exception as e:
+                print(e)
+        
+        elif type_form == "add_watchlist":
             try:
                 item_to_add = Auction_listing.objects.get(id=item.id)
                 active_user.whatchlist.add(item_to_add)
@@ -125,6 +144,7 @@ def listing_page(request, id):
 
     if id:
         return render(request, "auctions/listing_page.html",{
+            "categories": categories,
             "listing": item,
             "comments": comments,
             "is_in_watchlist": is_in_watchlist

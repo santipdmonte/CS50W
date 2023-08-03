@@ -3,19 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    {% if user.id == listing.owner.id %}
-        <form action="">
-            <input type="submit" class="btn btn-danger" value="Close bid">
-        </form>
-    {% endif %}
-
     {% if user.id == listing.winner.id and listing.active == True %}
         <div class="alert alert-success" role="alert">
             You are winning the bid
         </div>
-    {% elif user.id == listing.winner.id and  listing.active == False%}
+    {% elif user.id == listing.winner.id and  listing.active == False %}
         <div class="alert alert-success" role="alert">
-            You are winning the bid
+            You the winner!!!
         </div>
     {% endif %}
 
@@ -34,6 +28,14 @@
             </div>
             </div>
     </div>
+
+    {% if user.id == listing.owner.id and listing.active == True %}
+        <form action="{% url 'listing_page' id=listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" value="close_bid" name="type_form">
+            <input type="submit" class="btn btn-danger" value="Close bid">
+        </form>
+    {% endif %}
 
     {% if user.is_authenticated%}
 
