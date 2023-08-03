@@ -39,9 +39,10 @@
     <form action="">
         <input class="btn btn-secondary" type="button" value="Add to watchlist">
     </form>
-    <form action="">
+    <form action="{% url 'listing_page' id=listing.id %}" method="post">
         <!-- Validate all the inputs in server -->
-        <input class="" type="number" value="" min="{{ listing.actual_bid }}"> 
+        {% csrf_token %}
+        <input class="" type="number" value="" min="{{ listing.actual_bid }}" name="new_bid"> 
         <input type="submit" value="make bid">
     </form>
     <form action="">

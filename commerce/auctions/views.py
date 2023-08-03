@@ -67,11 +67,35 @@ def register(request):
         return render(request, "auctions/register.html")
     
 def listing_page(request, id):
-    item = Auction_listing.objects.filter(id = id)
-    print(item)
+    item = Auction_listing.objects.get(id = id)
+    print("Listing_page")
+
+    if request.method == "POST":
+        print("ENTRO")
+        new_amount_bid = request.POST["new_bid"]
+
+        if int(new_amount_bid) <=  int(item.actual_bid):
+            return 404
+        
+        new_bid = Bid(
+                amount = new_amount_bid,
+                bidder = request.user,
+                listing = item
+            )
+        new_bid.save()
+
+        item.actual_bid = new_amount_bid
+        item.winner = request.user
+
+        item.save()
+
+        return render(request, "auctions/listing_page.html",{
+            "listing": item
+        })
+
     if id:
         return render(request, "auctions/listing_page.html",{
-            "listing": item.first()
+            "listing": item
         })
     return render(request, "auctions/inedx.html")
 
