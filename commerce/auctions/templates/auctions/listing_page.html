@@ -42,14 +42,21 @@
     <form action="{% url 'listing_page' id=listing.id %}" method="post">
         <!-- Validate all the inputs in server -->
         {% csrf_token %}
+        <input type="hidden" value="new_bid" name="type_form">
         <input class="" type="number" value="" min="{{ listing.actual_bid }}" name="new_bid"> 
         <input type="submit" value="make bid">
     </form>
-    <form action="">
+    <form action="{% url 'listing_page' id=listing.id %}" method="post">
+        {% csrf_token %}
         <label for="">Comment: </label>
-        <input class="" type="text" placeholder="Comment..."> 
+        <input type="hidden" value="new_comment" name="type_form">
+        <input class="" type="text" placeholder="Comment..." name="new_comment"> 
         <input type="submit" value="Comment.">
     </form>
     {% endif %}   
+
+    {% for comment in comments %}
+        <p>{{ comment.commenter }}: {{ comment.comment }}</p>
+    {% endfor %}
 
 {% endblock %}

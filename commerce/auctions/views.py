@@ -68,34 +68,49 @@ def register(request):
     
 def listing_page(request, id):
     item = Auction_listing.objects.get(id = id)
+    comments = Comment.objects.filter(listing = item)
     print("Listing_page")
 
     if request.method == "POST":
         print("ENTRO")
-        new_amount_bid = request.POST["new_bid"]
 
-        if int(new_amount_bid) <=  int(item.actual_bid):
-            return 404
+        type_form = request.POST["type_form"]
         
-        new_bid = Bid(
-                amount = new_amount_bid,
-                bidder = request.user,
-                listing = item
-            )
-        new_bid.save()
 
-        item.actual_bid = new_amount_bid
-        item.winner = request.user
+        if type_form == "new_bid":
+            new_amount_bid = request.POST["new_bid"]
+            if int(new_amount_bid) <=  int(item.actual_bid):
+                return 404
+            
+            new_bid = Bid(
+                    amount = new_amount_bid,
+                    bidder = request.user,
+                    listing = item
+                )
+            new_bid.save()
 
-        item.save()
+            item.actual_bid = new_amount_bid
+            item.winner = request.user
 
-        return render(request, "auctions/listing_page.html",{
-            "listing": item
-        })
+            item.save()
+
+            return render(request, "auctions/listing_page.html",{
+                "listing": item,
+                "comments": comments
+            })
+        elif type_form == "new_comment":
+            new_comment = request.POST["new_comment"]
+            comment = Comment(
+                    comment = new_comment,
+                    commenter = request.user,
+                    listing = item
+                )
+            comment.save()
 
     if id:
         return render(request, "auctions/listing_page.html",{
-            "listing": item
+            "listing": item,
+            "comments": comments
         })
     return render(request, "auctions/inedx.html")
 
