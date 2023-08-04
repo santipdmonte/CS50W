@@ -21,7 +21,7 @@ def index(request):
 
 def login_view(request):
     categories = Category.objects.all()
-    
+
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -150,4 +150,23 @@ def listing_page(request, id):
             "is_in_watchlist": is_in_watchlist
         })
     return render(request, "auctions/inedx.html")
+
+
+def category_page(request, category_id):
+    category = Category.objects.get(id=category_id)
+    categories = Category.objects.all()
+
+    # Validate that the category exists
+    if category not in categories:
+        return 404
+    
+    active_listing = Auction_listing.objects.filter(active = True, category = category)
+    print(active_listing)
+    return render(request, "auctions/index.html",{
+            "categories": categories,
+            "selected_category": category, 
+            "listing": active_listing
+        })
+
+
 

@@ -1,6 +1,13 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'category_page' listing.category.id %}">{{ listing.category }}</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'listing_page' id=listing.id %}">{{ listing }}</a></li>
+        </ol>
+    </nav>
     <h2>Active Listings</h2>
 
     {% if user.id == listing.winner.id and listing.active == True %}
@@ -12,6 +19,8 @@
             You the winner!!!
         </div>
     {% endif %}
+
+    
 
     <div class="d-flex">
         <div class="card m-2" style="width: 18rem;">

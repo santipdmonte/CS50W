@@ -9,7 +9,7 @@ class Category(models.Model):
     name = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name.capitalize()}"
 
 class Auction_listing(models.Model):
     id = models.AutoField(primary_key=True)
@@ -24,7 +24,7 @@ class Auction_listing(models.Model):
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="winner", null=True)
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.title.capitalize()}"
 
 class Bid(models.Model):
     id = models.AutoField(primary_key=True)

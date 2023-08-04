@@ -1,7 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+
+    {% if selected_category %}
+        <h2>{{ selected_category }}</h2>
+    {% else %}
+        <h2>Active Listings</h2>
+    {% endif %}
 
     <div class="d-flex">
         {% for item in listing %}
