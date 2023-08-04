@@ -4,6 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import user_passes_test
+
+from django.core.exceptions import ValidationError
+
 from .models import User, Category, Auction_listing, Bid, Comment
 
 import utils
@@ -168,21 +173,39 @@ def category_page(request, category_id):
             "listing": active_listing
         })
 
+def is_user_authenticated(user):
+    return user.is_authenticated
+
+@user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
 def new_auction(request):
     categories = Category.objects.all()
 
     if request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
+
         image_url = request.POST["image_url"]
-        if image_url == '':
-            image_url = 'C:\Documentos\Santi Pedemonte PC\Cursos\CS50W\CS50W - GitHub\commerce\auctions\media\images\auctions\not_image.jpg'
-        starting_bid = request.POST["starting_bid"]
-        category = request.POST["category"]
-
-        print(f"{title=}\n{description=}\n{image_url=}\n{starting_bid=}\n{category=}")
-
+        if image_url == "":
+            image_url = '/static/auctions/images/not_image.jpg'
     
+        category = Category.objects.get(id = request.POST["category"])
+
+        new_auction = Auction_listing(
+            title = request.POST["title"],
+            description = request.POST["description"],
+            image_url = image_url,
+            starting_bid = request.POST["starting_bid"],
+            actual_bid = request.POST["starting_bid"],
+            category = category,
+            active = True,
+            owner = request.user
+        )
+        new_auction.save()
+    
+        active_listing = Auction_listing.objects.filter(active = True)
+        return render(request, "auctions/index.html",{
+            "categories": categories,
+            "listing": active_listing
+        })
+
     return render(request, "auctions/new_auction.html",{
             "categories": categories
         })
