@@ -168,5 +168,22 @@ def category_page(request, category_id):
             "listing": active_listing
         })
 
+def new_auction(request):
+    categories = Category.objects.all()
 
+    if request.method == "POST":
+        title = request.POST["title"]
+        description = request.POST["description"]
+        image_url = request.POST["image_url"]
+        if image_url == '':
+            image_url = 'C:\Documentos\Santi Pedemonte PC\Cursos\CS50W\CS50W - GitHub\commerce\auctions\media\images\auctions\not_image.jpg'
+        starting_bid = request.POST["starting_bid"]
+        category = request.POST["category"]
 
+        print(f"{title=}\n{description=}\n{image_url=}\n{starting_bid=}\n{category=}")
+
+    
+    return render(request, "auctions/new_auction.html",{
+            "categories": categories
+        })
+    

@@ -32,7 +32,12 @@
                                 <li><a class="dropdown-item" href="{% url 'category_page' category.id %}">{{ category }}</a></li>
                             {% endfor %}
                         </ul>
-                      </li>    
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'new_auction' %}">Make an Auction</a>
+                    </li>
+                      
                 </ul>
 
                 <ul class="nav">
