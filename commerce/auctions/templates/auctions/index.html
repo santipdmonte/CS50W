@@ -2,16 +2,32 @@
 
 {% block body %}
 
-    {% if selected_category %}
-        <h2>{{ selected_category }}</h2>
-    {% else %}
-        <h2>Active Listings</h2>
-    {% endif %}
-
     <div class="d-flex">
+        <h2>Active Listings</h2>    
+    
+        <div>
+            {% if selected_category %}
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{selected_category}}
+                </a>
+            {% else %}
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Category
+                  </a>
+            {% endif %}
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'index' %}">All categories</a></li>
+                    {% for category in categories %}
+                        <li><a class="dropdown-item" href="{% url 'category_page' category.id %}">{{ category }}</a></li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+
+    <div class="row d-flex flex-wrap justify-content-center">
         {% for item in listing %}
-            <div class="card m-2" style="width: 18rem;">
-                <img src="{{ item.image_url }}" class="card-img-top" alt="...">
+            <div class="card m-2" style="width: 16rem;">
+                <img src="{{ item.image_url }}" class="card-img-top" alt="..." style=" height: 200px; overflow: hidden; object-fit: contain;">
                 <div class="card-body">
                   <h5 class="card-title">{{ item.title }}</h5>
                   <p class="card-text">{{ item.description }}</p>
@@ -21,9 +37,12 @@
                   <p><s>${{ item.starting_bid }}</s></p> 
                   <p><b>Current bid: </b>${{ item.actual_bid }}</p>
                   {% endif %}
-                  <a href="{% url 'listing_page' id=item.id %}" class="btn btn-primary">TODO: Bottons</a>
+                  <a href="{% url 'listing_page' id=item.id %}" class="btn btn-primary">Make a bid</a>
                 </div>
             </div>
         {% endfor %}
+        {% if not listing %}
+            <p>No items in this category</p>
+        {% endif %}
     </div>
 {% endblock %}
