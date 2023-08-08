@@ -188,7 +188,6 @@ def category_page(request, category_id):
         return 404
     
     active_listing = Auction_listing.objects.filter(active = True, category = category)
-    print(active_listing)
     return render(request, "auctions/index.html",{
             "categories": categories,
             "selected_category": category, 
