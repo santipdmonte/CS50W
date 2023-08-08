@@ -13,15 +13,17 @@ from .models import User, Category, Auction_listing, Bid, Comment
 
 import utils
 
+# To validate a decorator
+def is_user_authenticated(user):
+    return user.is_authenticated
 
 def index(request):
     categories = Category.objects.all()
     active_listing = Auction_listing.objects.filter(active = True)
     
+    user_watchlist = []
     if request.user.is_authenticated:
         user_watchlist = request.user.watchlist.filter(active = True)
-    else:
-        user_watchlist = []
 
     return render(request, "auctions/index.html",{
         "categories": categories,
@@ -95,32 +97,27 @@ def listing_page(request, id):
     comments = Comment.objects.filter(listing = item)
     active_user = request.user
     
+    user_watchlist = []
     if request.user.is_authenticated:
-        watchlist = active_user.watchlist.all()
-    watchlist = []
+        user_watchlist = active_user.watchlist.all()
+
     is_in_watchlist = False
-    if item in watchlist:
+    if item in user_watchlist:
         is_in_watchlist = True
 
     if request.method == "POST":
 
         type_form = request.POST["type_form"]
 
-        if type_form == "close_bid":
-            try:
-                item.active = False
-                item.save()
-            except Exception as e:
-                print(e)
         
-        elif type_form == "add_watchlist":
+        # Add/remove item from watchlist 
+        if type_form == "add_watchlist":
             try:
                 item_to_add = Auction_listing.objects.get(id=item.id)
                 active_user.watchlist.add(item_to_add)
                 is_in_watchlist = True
             except Exception as e:
                 print(e)
-
         elif type_form == "remove_watchlist":
             try:
                 item_to_remove = Auction_listing.objects.get(id=item.id)
@@ -131,6 +128,15 @@ def listing_page(request, id):
             except Exception as e:
                 print(e)
 
+        # Close the actual bid
+        elif type_form == "close_bid":
+            try:
+                item.active = False
+                item.save()
+            except Exception as e:
+                print(e)
+
+        # Create a new bid
         elif type_form == "new_bid":
             new_amount_bid = request.POST["new_bid"]
             if int(new_amount_bid) <=  int(item.actual_bid):
@@ -147,6 +153,7 @@ def listing_page(request, id):
             item.winner = active_user
             item.save()
 
+        # Add a comment
         elif type_form == "new_comment":
             new_comment = request.POST["new_comment"]
             comment = Comment(
@@ -156,8 +163,11 @@ def listing_page(request, id):
                 )
             comment.save()
 
-        if request.POST["from"] == "from_index":
+        message = request.POST["from"]
+        if  message == "from_index":
             return index(request)
+        elif message == "from_watchlist":
+            return watchlist(request)
     
     if id:
         return render(request, "auctions/listing_page.html",{
@@ -184,9 +194,6 @@ def category_page(request, category_id):
             "selected_category": category, 
             "listing": active_listing
         })
-
-def is_user_authenticated(user):
-    return user.is_authenticated
 
 @user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
 def watchlist(request):
