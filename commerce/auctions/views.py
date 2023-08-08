@@ -17,10 +17,17 @@ import utils
 def index(request):
     categories = Category.objects.all()
     active_listing = Auction_listing.objects.filter(active = True)
+    
+    if request.user.is_authenticated:
+        user_watchlist = request.user.watchlist.filter(active = True)
+    else:
+        user_watchlist = []
 
     return render(request, "auctions/index.html",{
         "categories": categories,
-        "listing": active_listing
+        "listing": active_listing,
+        "watchlist": user_watchlist,
+        "message": "Active Listing"
     })
 
 
@@ -88,9 +95,11 @@ def listing_page(request, id):
     comments = Comment.objects.filter(listing = item)
     active_user = request.user
     
-    whatchlist = active_user.whatchlist.all()
+    if request.user.is_authenticated:
+        watchlist = active_user.watchlist.all()
+    watchlist = []
     is_in_watchlist = False
-    if item in whatchlist:
+    if item in watchlist:
         is_in_watchlist = True
 
     if request.method == "POST":
@@ -107,7 +116,7 @@ def listing_page(request, id):
         elif type_form == "add_watchlist":
             try:
                 item_to_add = Auction_listing.objects.get(id=item.id)
-                active_user.whatchlist.add(item_to_add)
+                active_user.watchlist.add(item_to_add)
                 is_in_watchlist = True
             except Exception as e:
                 print(e)
@@ -117,7 +126,7 @@ def listing_page(request, id):
                 item_to_remove = Auction_listing.objects.get(id=item.id)
                 print(f"{item_to_remove=}")
                 print(f"{active_user=}")
-                active_user.whatchlist.remove(item_to_remove)
+                active_user.watchlist.remove(item_to_remove)
                 is_in_watchlist = False
             except Exception as e:
                 print(e)
@@ -147,6 +156,9 @@ def listing_page(request, id):
                 )
             comment.save()
 
+        if request.POST["from"] == "from_index":
+            return index(request)
+    
     if id:
         return render(request, "auctions/listing_page.html",{
             "categories": categories,
@@ -175,6 +187,20 @@ def category_page(request, category_id):
 
 def is_user_authenticated(user):
     return user.is_authenticated
+
+@user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
+def watchlist(request):
+    categories = Category.objects.all()
+
+    user_watchlist = request.user.watchlist.filter(active = True)
+
+    return render(request, "auctions/index.html",{
+            "categories": categories,
+            "listing": user_watchlist,
+            "watchlist": user_watchlist,
+            "message": "Watchlist"
+        })
+
 
 @user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
 def new_auction(request):
@@ -209,4 +235,14 @@ def new_auction(request):
     return render(request, "auctions/new_auction.html",{
             "categories": categories
         })
+
+@user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
+def my_active_listing(request):
+    categories = Category.objects.all()
+    active_listing = Auction_listing.objects.filter(active = True, owner = request.user)
+    return render(request, "auctions/index.html",{
+        "categories": categories,
+        "listing": active_listing,
+        "message": "My Actives listings"
+    })
     

@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    whatchlist = models.ManyToManyField("Auction_listing", blank=True, related_name="watchlist")
+    watchlist = models.ManyToManyField("Auction_listing", blank=True, related_name="watchlist")
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
