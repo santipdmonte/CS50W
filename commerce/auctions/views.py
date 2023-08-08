@@ -185,13 +185,14 @@ def category_page(request, category_id):
 
     # Validate that the category exists
     if category not in categories:
-        return 404
+        raise Exception("An internal server error occurred.")
     
     active_listing = Auction_listing.objects.filter(active = True, category = category)
     return render(request, "auctions/index.html",{
             "categories": categories,
             "selected_category": category, 
-            "listing": active_listing
+            "listing": active_listing,
+            "message": "Active Listing"
         })
 
 @user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
