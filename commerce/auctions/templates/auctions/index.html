@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    <div class="row d-flex flex-wrap justify-content-center">
+    <div class="row d-flex flex-wrap justify-content-center ml-4 mr-4">
 
         {% for item in listing %}
-            <div class="card m-2" style="width: 16rem; position: relative;">
+            <div class="card m-2" style="width: 30vh; position: relative;">
                 <img src="{{ item.image_url }}" class="card-img-top" alt="..." style=" height: 200px; overflow: hidden; object-fit: contain;">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.title }}</h5>

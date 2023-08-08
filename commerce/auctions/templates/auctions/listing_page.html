@@ -71,6 +71,7 @@
                                         {% csrf_token %}
 
                                         <input type="hidden" value="from_listing_page" name="from">
+                                        
                                         {% if is_in_watchlist %}
                                             <!-- Remove from watchlist -->
                                             <input type="hidden" value="remove_watchlist" name="type_form">

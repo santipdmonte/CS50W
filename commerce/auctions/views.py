@@ -91,6 +91,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
     
+
 def listing_page(request, id):
     item = Auction_listing.objects.get(id = id)
     categories = Category.objects.all()
@@ -109,7 +110,6 @@ def listing_page(request, id):
 
         type_form = request.POST["type_form"]
 
-        
         # Add/remove item from watchlist 
         if type_form == "add_watchlist":
             try:
@@ -163,7 +163,7 @@ def listing_page(request, id):
                 )
             comment.save()
 
-        message = request.POST["from"]
+        message = request.POST.get("from") # If the form does not have a "from" it returns none
         if  message == "from_index":
             return index(request)
         elif message == "from_watchlist":
@@ -194,6 +194,7 @@ def category_page(request, category_id):
             "listing": active_listing,
             "message": "Active Listing"
         })
+
 
 @user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
 def watchlist(request):
@@ -234,14 +235,12 @@ def new_auction(request):
         new_auction.save()
     
         active_listing = Auction_listing.objects.filter(active = True)
-        return render(request, "auctions/index.html",{
-            "categories": categories,
-            "listing": active_listing
-        })
+        return my_active_listing(request)
 
     return render(request, "auctions/new_auction.html",{
             "categories": categories
         })
+
 
 @user_passes_test(is_user_authenticated, login_url='/login') # If the user ir not login go to login.html
 def my_active_listing(request):
