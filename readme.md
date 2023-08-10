@@ -8,6 +8,11 @@ Welcome to the CS50W repository! This repository contains the projects and code 
 
 CS50W is a hands-on course that will equip you with the knowledge and skills to design and deploy web applications on the Internet. The course covers various topics, including database design, creating scalable applications, ensuring security, and optimizing user experience. Through a series of practical projects, you'll learn to write and use APIs, develop interactive user interfaces, and leverage cloud services such as GitHub and Heroku.
 
+## Course Projects
+* Project 0: Search (https://youtu.be/zwk0eZFBvjk)
+* Project 1: Wiki (https://youtu.be/WaeuJ1ZE9QA)
+* Project 2: Commerce (https://youtu.be/vNryioV--ko)
+
 ## Learning Objectives
 
 Throughout this course, you will learn:
