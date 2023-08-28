@@ -1,3 +1,17 @@
 textarea {
-    min-height: 400px;
+    min-height: 30vh;
 }
+
+.row{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.row:hover{
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    z-index: 5;
+}
+

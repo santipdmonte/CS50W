@@ -77,26 +77,41 @@ function load_mailbox(mailbox) {
       // Print emails
       console.log("emails: ",emails);
       emails.forEach(email => {
+
+        // Check if the email was read
         backgroundColor = "white"
         if (email.read){
-          backgroundColor = "#D3D3D3";
+          backgroundColor = "#e8e8e8";
         };
+
+        // Check the length of the body
+        email_body = email.body
+        console.log(email.body.length)
+        if (email_body.length > 25){
+          email_body = email_body.slice(0, 25) + '...';
+        }
+
         const emailRow = document.createElement('div');
         emailRow.className = 'container';
-        emailRow.innerHTML = `
-        <div class="row emailrow" style="border: 1px grey solid; background-color: ${backgroundColor}; cursor: pointer">
+        emailContent = `
+        <div class="row" style="border-bottom: 1px D3D3D3 solid; background-color: ${backgroundColor}; cursor: pointer">
             <div class="col">
-                <b>${email.sender}</b>
+                ${email.sender}
             </div>
             <div class="col" >
-                <p>${email.subject} - <span style="color:grey">${email.body}</span></p>
+                <p>${email.subject} - <span style="color:grey">${email_body}</span></p>
             </div>
             <div class="text-left">
-                <div class="col" style="color:grey">
+                <div class="col">
                     ${email.timestamp}
                 </div>
             </div>
         </div>`;
+
+        emailRow.innerHTML = `<b>${emailContent}</b>`
+        if (email.read){
+          emailRow.innerHTML = emailContent
+        };
 
         // Agregar el emailRow al view
         view.appendChild(emailRow);
@@ -139,27 +154,43 @@ function open_email(id){
     
     const archive_btn = document.createElement('button');
     archive_btn.className = 'btn btn-primary';
-    archive_btn.innerHTML = 'Archive'
+    archive_btn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+      <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+    </svg>
+     Archive`
     if (email.archived){ 
       archive_btn.className = 'btn btn-secondary';
-      archive_btn.innerHTML = 'Unarchive'
+      archive_btn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+      </svg>
+       Unarchive`
     }
 
     const reply_btn = document.createElement('button');
-    reply_btn.className = 'btn btn-primary';
-    reply_btn.innerHTML = 'Reply'
+    reply_btn.className = 'btn btn-primary mr-3';
+    reply_btn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-all-fill" viewBox="0 0 16 16">
+      <path d="M8.021 11.9 3.453 8.62a.719.719 0 0 1 0-1.238L8.021 4.1a.716.716 0 0 1 1.079.619V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+      <path d="M5.232 4.293a.5.5 0 0 1-.106.7L1.114 7.945a.5.5 0 0 1-.042.028.147.147 0 0 0 0 .252.503.503 0 0 1 .042.028l4.012 2.954a.5.5 0 1 1-.593.805L.539 9.073a1.147 1.147 0 0 1 0-1.946l3.994-2.94a.5.5 0 0 1 .699.106z"/>
+    </svg>
+     Reply ` 
     
     view = document.querySelector('#email-view')
     view.innerHTML = 
     `
-    <div>
-      <h4>${email.subjet}</h4>
-      <p>${email.sender} - ${email.timestamp}</p>
+    <div style="height: 50vh;">
+      <h3>${email.subject}</h3>
+      <div class="d-flex justify-content-between mr-3">
+        <p>${email.sender}<p><p>${email.timestamp}</p>
+      </div>
+      <hr>
       <p>${email.body}</p>
     </div>
     `
-    view.append(archive_btn)
     view.append(reply_btn)
+    view.append(archive_btn)
 
 
     // Change Archive and Unarchive
