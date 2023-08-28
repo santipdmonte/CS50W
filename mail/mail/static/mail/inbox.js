@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
-
-  // Email click
-  // document.querySelector('.email-row').addEventListener('click', () => open_email());
-
+  
   // By default, load the inbox
   load_mailbox('inbox');
+
 });
 
 // Send the compose mail
@@ -77,29 +75,37 @@ function load_mailbox(mailbox) {
     if (emails && emails.length > 0) {
 
       // Print emails
-      console.log(emails);
+      console.log("emails: ",emails);
       emails.forEach(email => {
-        console.log(email.read)
         backgroundColor = "white"
         if (email.read){
           backgroundColor = "#D3D3D3";
         };
-        view.innerHTML += `
-        <div class="container">
-          <div class="row email-row" data-id=${email.id} style="border: 1px grey solid; background-color: ${backgroundColor}; cursor: pointer";>
+        const emailRow = document.createElement('div');
+        emailRow.className = 'container';
+        emailRow.innerHTML = `
+        <div class="row emailrow" style="border: 1px grey solid; background-color: ${backgroundColor}; cursor: pointer">
             <div class="col">
-              <b>${email.sender}</b>
+                <b>${email.sender}</b>
             </div>
             <div class="col" >
-              <p>${email.subject} - <span style="color:grey">${email.body}</span></p>
+                <p>${email.subject} - <span style="color:grey">${email.body}</span></p>
             </div>
             <div class="text-left">
-              <div class="col" style="color:grey">
-                ${email.timestamp}
-              </div>
+                <div class="col" style="color:grey">
+                    ${email.timestamp}
+                </div>
             </div>
-          </div>
         </div>`;
+
+        // Agregar el emailRow al view
+        view.appendChild(emailRow);
+
+        // Agregar un event listener a emailRow
+        emailRow.addEventListener('click', function() {
+            // Manejar el clic en emailRow aquí
+            open_email(email.id);
+        });
       })
 
     } else {
@@ -107,22 +113,42 @@ function load_mailbox(mailbox) {
     }
 
   });
+
 }
 
-// function open_email(){
-//   // Show compose view and hide other views
-//   document.querySelector('#emails-view').style.display = 'none';
-//   document.querySelector('#compose-view').style.display = 'none';
-//   document.querySelector('#email-view').style.display = 'block'; 
+function open_email(id){
+  console.log("open_email")
 
-//   console.log("open_email")
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'block'; 
 
-//   fetch(`/emails/${div.data.id}`)
-//   .then(response => response.json())
-//   .then(email => {
-//     // Print email
-//     console.log(email);
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
 
-//   });
+    // Mark the email as read
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          read: true
+      })
+    })
 
-// }
+    // Print email
+    console.log(email);
+
+    view = document.querySelector('#email-view')
+    view.innerHTML = 
+    `
+    <div>
+      <h4>${email.subjet}</h4>
+      <p>${email.sender} - ${email.timestamp}</p>
+      <p>${email.body}</p>
+    </div>
+    `
+
+  });
+
+}
