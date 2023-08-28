@@ -119,26 +119,32 @@ function load_mailbox(mailbox) {
 function open_email(id){
   console.log("open_email")
 
+  
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block'; 
-
+  
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
-
+    
     // Mark the email as read
     fetch(`/emails/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
-          read: true
+        read: true
       })
     })
-
-    // Print email
-    console.log(email);
-
+    
+    const archive_btn = document.createElement('button');
+    archive_btn.className = 'btn btn-primary';
+    archive_btn.innerHTML = 'Archive'
+    if (email.archived){ 
+      archive_btn.className = 'btn btn-secondary';
+      archive_btn.innerHTML = 'Unarchive'
+    }
+    
     view = document.querySelector('#email-view')
     view.innerHTML = 
     `
@@ -148,7 +154,32 @@ function open_email(id){
       <p>${email.body}</p>
     </div>
     `
+    view.append(archive_btn)
 
+    // Change Archive and Unarchive
+    archive_btn.addEventListener('click', () => ch_archive(email));
+    
   });
+  
+}
 
+function ch_archive(email){
+  console.log("ch_archive")
+  if (email.archived){
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: false
+      })
+    })
+    
+  } else {
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: true
+      })
+    })
+  }
+  load_mailbox('inbox')
 }
