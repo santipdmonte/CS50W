@@ -144,6 +144,10 @@ function open_email(id){
       archive_btn.className = 'btn btn-secondary';
       archive_btn.innerHTML = 'Unarchive'
     }
+
+    const reply_btn = document.createElement('button');
+    reply_btn.className = 'btn btn-primary';
+    reply_btn.innerHTML = 'Reply'
     
     view = document.querySelector('#email-view')
     view.innerHTML = 
@@ -155,9 +159,12 @@ function open_email(id){
     </div>
     `
     view.append(archive_btn)
+    view.append(reply_btn)
+
 
     // Change Archive and Unarchive
     archive_btn.addEventListener('click', () => ch_archive(email));
+    reply_btn.addEventListener('click', () => reply_email(email));
     
   });
   
@@ -182,4 +189,25 @@ function ch_archive(email){
     })
   }
   load_mailbox('inbox')
+}
+
+
+function reply_email(email){
+  console.log("reply_email")
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = email.sender;
+  if (email.subject.startsWith("Re: ")){
+    document.querySelector('#compose-subject').value = email.subject;
+  } else {
+    document.querySelector('#compose-subject').value = 'Re: ' + email.subject;
+  }
+  document.querySelector('#compose-body').value = `${email.timestamp} ${email.sender} wrote: ${email.body}`;
+
+  // Work with the compose form
+  document.querySelector("#compose-form").addEventListener('submit', () => send_mail());
 }
