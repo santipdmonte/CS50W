@@ -12,6 +12,7 @@ CS50W is a hands-on course that will equip you with the knowledge and skills to 
 * Project 0: Search (https://youtu.be/zwk0eZFBvjk)
 * Project 1: Wiki (https://youtu.be/WaeuJ1ZE9QA)
 * Project 2: Commerce (https://youtu.be/vNryioV--ko)
+* Project 3: Mail (https://youtu.be/XbKaDqxi2U0)
 
 ## Learning Objectives
 
