@@ -1,6 +1,18 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+    <div>
+        <h1>{{ profile.username }}</h1>
+        <p>{{ profile.email }}</p>
+        <p>{{ profile.date_joined }}</p>
+        <p>Followers: {{ profile.count_followers }}</p>
+        <p>Following: {{ profile.count_following }}</p>
+        {% if user and user != profile%}
+            <!-- TODO with JS -->
+            <button> Follow </button>
+            <button>Unfollow</button>
+        {% endif %}
+    </div>
     <div class="d-flex flex-wrap justify-content-center p-2">
         {% for post in posts %}
             <div class="card m-2" style="width: 18rem;">
@@ -13,7 +25,9 @@
                     <!-- Need to change this to js fetch -->
                     <p id="likes-{{post.id}}">{{ post.count_likes }}</p>
                       
-                    <a href="#" class="btn btn-primary">Like</a>
+                    {% if user %}
+                        <a href="#" class="btn btn-primary">Like</a>    
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
