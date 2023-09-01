@@ -14,6 +14,14 @@ class User(AbstractUser):
     
     def count_following(self):
         return self.following.count()
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "followers": self.count_followers(),
+            "following": self.count_following(),
+        }
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
@@ -23,20 +31,26 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
     edited = models.BooleanField(default=False)
-    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True, through='Like')
+    liked_by = models.ManyToManyField(User, related_name='liked_posts')
     
     def __str__(self):
         return f"{self.title}"
     
     def count_likes(self):
-        return self.likes.count()
+        return self.liked_by.count()
     
-
-class Like(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "title": self.title,
+            "content": self.content,
+            "created_at": self.created_at.strftime("%b %d %Y, %I:%M %p"),
+            "edited_at": self.edited_at.strftime("%b %d %Y, %I:%M %p"),
+            "edited": self.edited,
+            "likes": self.count_likes(),
+        }
+    
 
 
 

@@ -1,6 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+
     <h2>New post</h2>
     <form action="{% url 'new_post' %}" method="post">
         {% csrf_token %}

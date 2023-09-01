@@ -1,21 +1,24 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
-    <div class="d-flex flex-wrap justify-content-center p-2">
-        {% for post in posts %}
-            <div class="card m-2" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p>{{ post.user }}</p>
-                    <p class="card-text">{{ post.content }}</p>
-                    <p>{{ post.created_at }}</p>
 
-                    <!-- Need to change this to js fetch -->
-                    <p id="likes-{{post.id}}">{{ post.count_likes }}</p>
-                      
-                    <a href="#" class="btn btn-primary">Like</a>
-                </div>
-            </div>
+    <div class="d-flex flex-wrap justify-content-center p-2">
+
+        {% for post in posts %}
+
+            {% block post %}
+
+                {% include "network/post.html" %}
+
+            {% endblock %}
+
         {% endfor %}
+
     </div>
 {% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/like.js' %}"></script>
+{% endblock %}
+

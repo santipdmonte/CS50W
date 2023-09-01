@@ -1,0 +1,47 @@
+{% block post %}
+            
+    <div class="card m-2" style="width: 18rem;">
+        <div class="card-body">
+            
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p>{{ post.user }}</p>
+            <p class="card-text">{{ post.content }}</p>
+            <p>{{ post.created_at }}</p>
+
+            <!-- Need to change this to js fetch -->
+            <p id="like-counter-{{post.id}}">{{ post.count_likes }}</p>
+
+            {% if user %}
+                {% if user in post.liked_by.all %}
+                    <button 
+                        id="unlikeBtn-{{post.id}}" 
+                        class="btn btn-primary"
+                        onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
+                        style="display: block;"
+                    >Unlike</button>
+                    <button 
+                        id="likeBtn-{{post.id}}" 
+                        class="btn btn-primary "
+                        onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
+                        style="display: none;"
+                    >Like</button>
+                {% else %}
+                    <button 
+                        id="likeBtn-{{post.id}}" 
+                        class="btn btn-primary "
+                        onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
+                        style="display: block;"
+                    >Like</button>
+                    <button 
+                        id="unlikeBtn-{{post.id}}" 
+                        class="btn btn-primary"
+                        onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
+                        style="display: none;"
+                    >Unlike</button>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

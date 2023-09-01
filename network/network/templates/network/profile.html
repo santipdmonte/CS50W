@@ -1,35 +1,51 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
+    <div id="csrfToken" data-csrf="{{ csrf_token }}"></div>
+
     <div>
         <h1>{{ profile.username }}</h1>
         <p>{{ profile.email }}</p>
         <p>{{ profile.date_joined }}</p>
-        <p>Followers: {{ profile.count_followers }}</p>
-        <p>Following: {{ profile.count_following }}</p>
+        <p>Followers: <span id="followers">{{ profile.count_followers }}</span></p>
+        <p>Following: <span id="folowing">{{ profile.count_following }}</span></p>
         {% if user and user != profile%}
-            <!-- TODO with JS -->
-            <button> Follow </button>
-            <button>Unfollow</button>
+            {% if is_following %}
+                <button 
+                    id="unfollow" 
+                    onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    style="display: block;"
+                > Unfollow </button>
+                <button 
+                    id="follow" 
+                    onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    style="display: none;"    
+                >Follow </button>
+            {% else %}
+                <button 
+                    id="follow" 
+                    onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    style="display: block;"    
+                >Follow </button>
+                <button 
+                    id="unfollow" 
+                    onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    style="display: none;"
+                > Unfollow </button>
+            {% endif %}
         {% endif %}
     </div>
     <div class="d-flex flex-wrap justify-content-center p-2">
         {% for post in posts %}
-            <div class="card m-2" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p>{{ post.user }}</p>
-                    <p class="card-text">{{ post.content }}</p>
-                    <p>{{ post.created_at }}</p>
-
-                    <!-- Need to change this to js fetch -->
-                    <p id="likes-{{post.id}}">{{ post.count_likes }}</p>
-                      
-                    {% if user %}
-                        <a href="#" class="btn btn-primary">Like</a>    
-                    {% endif %}
-                </div>
-            </div>
+            {% block post %}
+                {% include "network/post.html" %}
+            {% endblock %}
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/follow.js' %}"></script>
+    <script src="{% static 'network/like.js' %}"></script>
 {% endblock %}

@@ -3,14 +3,21 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
-from .models import User, Post, Like
+from .models import User, Post
 
 
 def index(request):
+    user = request.user
+    if not user.is_authenticated:
+        user = None
+
     posts = Post.objects.all()
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": posts,
+        "user": user
     })
 
 def following(request):
@@ -19,7 +26,7 @@ def following(request):
         return render(request, "network/register.html")
     
     following = user.following.all()
-    
+
     # User__in to check if the user is in the list of following
     posts = Post.objects.filter(user__in = following)
     return render(request, "network/index.html", {
@@ -104,16 +111,57 @@ def new_post(request):
     else:
         return render(request, "network/new_post.html")
     
+@csrf_exempt
 def profile(request, username):
     user = request.user
     if not user.is_authenticated:
         user = None
 
+    if request.method == "PUT":
+        # Get the user to follow
+        user_to_follow = User.objects.get(username=username)
+
+        # Check if the user is already following
+        if user_to_follow in user.following.all():
+            user.following.remove(user_to_follow)
+            user_to_follow.followers.remove(user)
+        else:
+            user.following.add(user_to_follow)
+            user_to_follow.followers.add(user)
+        return JsonResponse(user_to_follow.serialize(), safe=False)
+        # return HttpResponse(status=204)
+
+    # <TODO> If GET return followers and following count     
+
     profile = User.objects.get(username=username)
     posts = Post.objects.filter(user=profile)
+
+    is_following = profile in user.following.all()
+
     return render(request, "network/profile.html", {
         "profile": profile,
         "posts": posts,
-        "user": user
+        "user": user,
+        "is_following": is_following
     })
+
+@csrf_exempt
+def postData(request, postId):
+    if request.method == "PUT":
+        # Get the user to follow
+        post = Post.objects.get(id=postId)
+        user = request.user
+
+        # Check if the user is already following
+        if user in post.liked_by.all():
+            print("Unlike")
+            post.liked_by.remove(user)
+        else:
+            print("Like")
+            post.liked_by.add(user)
+
+        return JsonResponse(post.serialize(), safe=False)
+        # return HttpResponse(status=204)
+
+    return HttpResponse(status=400)
     
