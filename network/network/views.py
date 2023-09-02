@@ -16,7 +16,7 @@ def index(request):
     if not user.is_authenticated:
         user = None
         
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-created_at')
 
     # Add Pagination to the posts
     page_posts = Paginator(posts, 4)
@@ -36,7 +36,7 @@ def following(request):
     following = user.following.all()
 
     # User__in to check if the user is in the list of following
-    posts = Post.objects.filter(user__in = following)
+    posts = Post.objects.filter(user__in = following).order_by('-created_at')
 
     # Add Pagination to the posts
     page_posts = Paginator(posts, 4)
@@ -146,7 +146,7 @@ def profile(request, username):
         # return HttpResponse(status=204)  
 
     profile = User.objects.get(username=username)
-    posts = Post.objects.filter(user=profile)
+    posts = Post.objects.filter(user=profile).order_by('-created_at')
 
         # Add Pagination to the posts
     page_posts = Paginator(posts, 4)
