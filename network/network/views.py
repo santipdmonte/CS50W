@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.core.paginator import Paginator
+import json
 
 from .models import User, Post
 
@@ -14,10 +15,11 @@ def index(request):
     user = request.user
     if not user.is_authenticated:
         user = None
-
+        
     posts = Post.objects.all()
-    page_posts = Paginator(posts, 4)
 
+    # Add Pagination to the posts
+    page_posts = Paginator(posts, 4)
     page_number = request.GET.get('page')
     page_obj = page_posts.get_page(page_number)
 
@@ -35,8 +37,14 @@ def following(request):
 
     # User__in to check if the user is in the list of following
     posts = Post.objects.filter(user__in = following)
+
+    # Add Pagination to the posts
+    page_posts = Paginator(posts, 4)
+    page_number = request.GET.get('page')
+    page_obj = page_posts.get_page(page_number)
+
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": page_obj
     })
 
 
@@ -165,6 +173,28 @@ def postData(request, postId):
         else:
             print("Like")
             post.liked_by.add(user)
+
+        return JsonResponse(post.serialize(), safe=False)
+        # return HttpResponse(status=204)
+
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def postEdit(request, postId):
+    if request.method == "PUT":
+        # Get the user to follow
+        data = json.loads(request.body)
+        post = Post.objects.get(id=postId)
+        user = request.user
+
+        # Check if the user is already following
+        if user == post.user:
+            post.title = data["title"]
+            post.content = data["content"]
+            post.edited = True
+            post.save()
+        else:
+            print("Error: User not allowed to edit this post")
 
         return JsonResponse(post.serialize(), safe=False)
         # return HttpResponse(status=204)

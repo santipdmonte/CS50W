@@ -1,47 +1,77 @@
+{% load static %}
 {% block post %}
             
     <div class="card m-2" style="width: 18rem;">
         <div class="card-body">
-            
-            <h5 class="card-title">{{ post.title }}</h5>
-            <p>{{ post.user }}</p>
-            <p class="card-text">{{ post.content }}</p>
-            <p>{{ post.created_at }}</p>
 
-            <!-- Need to change this to js fetch -->
-            <p id="like-counter-{{post.id}}">{{ post.count_likes }}</p>
+            <div id="post-container-{{ post.id }}">
+                <h5 class="card-title" id="post-title-{{post.id}}">{{ post.title }}</h5>
+                <p>{{ post.user }}</p>
+                <p class="card-text" id="post-content-{{post.id}}">{{ post.content }}</p>
+                <p>{{ post.created_at }}</p>
+    
+                <!-- Need to change this to js fetch -->
+                <p id="like-counter-{{post.id}}">{{ post.count_likes }}</p>
+    
+                <div class="d-flex">
+                    {% if user %}
+                        {% if user in post.liked_by.all %}
+                            <button 
+                                id="unlikeBtn-{{post.id}}" 
+                                class="btn btn-primary"
+                                onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
+                                style="display: block;"
+                            >Unlike</button>
+                            <button 
+                                id="likeBtn-{{post.id}}" 
+                                class="btn btn-primary "
+                                onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
+                                style="display: none;"
+                            >Like</button>
+                        {% else %}
+                            <button 
+                                id="likeBtn-{{post.id}}" 
+                                class="btn btn-primary "
+                                onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
+                                style="display: block;"
+                            >Like</button>
+                            <button 
+                                id="unlikeBtn-{{post.id}}" 
+                                class="btn btn-primary"
+                                onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
+                                style="display: none;"
+                            >Unlike</button>
+                        {% endif %}
+                    {% endif %}
+    
+                    {% if user == post.user %}
+                        <button 
+                            id="editBtn-{{post.id}}" 
+                            class="btn btn-danger ml-2"
+                            onclick="editPost('{{ post.id }}')"
+                            style="display: block;"
+                        >Edit</button>
+                    {% endif %}
+                </div>
+            </div>
 
-            {% if user %}
-                {% if user in post.liked_by.all %}
-                    <button 
-                        id="unlikeBtn-{{post.id}}" 
-                        class="btn btn-primary"
-                        onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
-                        style="display: block;"
-                    >Unlike</button>
-                    <button 
-                        id="likeBtn-{{post.id}}" 
-                        class="btn btn-primary "
-                        onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
-                        style="display: none;"
-                    >Like</button>
-                {% else %}
-                    <button 
-                        id="likeBtn-{{post.id}}" 
-                        class="btn btn-primary "
-                        onclick="likeOrUnlike('like','{{ user.id }}','{{ post.id }}')"
-                        style="display: block;"
-                    >Like</button>
-                    <button 
-                        id="unlikeBtn-{{post.id}}" 
-                        class="btn btn-primary"
-                        onclick="likeOrUnlike('unlike','{{ user.id }}','{{ post.id }}')"
-                        style="display: none;"
-                    >Unlike</button>
-                {% endif %}
-            {% endif %}
+            <div id="edit-container-{{ post.id }}" style="display: none;">
 
+                <form id="form-edit-{{ post.id }}">
+                    <input type="text" name="title" id="edit-title-{{post.id}}" value="{{ post.title }}">
+                    <textarea name="content" id="edit-content-{{post.id}}" cols="30" rows="8">{{ post.content }}</textarea>
+    
+                    <button id="submit-edit-form-{{ post.id }}" class="btn btn-success">Save</button>
+                    <button id="cancel-edit-{{ post.id }}" class="btn btn-secondary">Cancel</button>                
+                </form>
+
+            </div>
+        
         </div>
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/post_action.js' %}"></script>
 {% endblock %}
