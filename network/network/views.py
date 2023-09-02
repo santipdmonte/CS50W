@@ -41,10 +41,10 @@ def following(request):
     # Add Pagination to the posts
     page_posts = Paginator(posts, 4)
     page_number = request.GET.get('page')
-    page_obj = page_posts.get_page(page_number)
+    posts_obj = page_posts.get_page(page_number)
 
     return render(request, "network/index.html", {
-        "posts": page_obj
+        "posts": posts_obj
     })
 
 
@@ -143,18 +143,21 @@ def profile(request, username):
             user.following.add(user_to_follow)
             user_to_follow.followers.add(user)
         return JsonResponse(user_to_follow.serialize(), safe=False)
-        # return HttpResponse(status=204)
-
-    # <TODO> If GET return followers and following count     
+        # return HttpResponse(status=204)  
 
     profile = User.objects.get(username=username)
     posts = Post.objects.filter(user=profile)
+
+        # Add Pagination to the posts
+    page_posts = Paginator(posts, 4)
+    page_number = request.GET.get('page')
+    posts_obj = page_posts.get_page(page_number)
 
     is_following = profile in user.following.all()
 
     return render(request, "network/profile.html", {
         "profile": profile,
-        "posts": posts,
+        "posts": posts_obj,
         "user": user,
         "is_following": is_following
     })

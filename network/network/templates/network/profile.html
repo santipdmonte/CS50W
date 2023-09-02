@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block body %}
-    <div id="csrfToken" data-csrf="{{ csrf_token }}"></div>
 
+    <!-- Profile -->
     <div>
         <h1>{{ profile.username }}</h1>
         <p>{{ profile.email }}</p>
@@ -36,6 +36,8 @@
             {% endif %}
         {% endif %}
     </div>
+
+    <!-- Posts -->
     <div class="d-flex flex-wrap justify-content-center p-2">
         {% for post in posts %}
             {% block post %}
@@ -43,6 +45,10 @@
             {% endblock %}
         {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    {% include "network/pagination.html" %}
+
 {% endblock %}
 
 {% block script %}
