@@ -11,8 +11,9 @@ function likeOrUnlike(action, userId, post_id) {
     })
     .then(response => response.json())
     .then(postData => {
-        console.log(postData)
+        
         likeCounter.textContent = postData.likes
+
         if (action == 'like') {
             document.querySelector(`#likeBtn-${post_id}`).style.display = 'none';
             document.querySelector(`#unlikeBtn-${post_id}`).style.display = 'block';

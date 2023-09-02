@@ -15,22 +15,26 @@
                 <button 
                     id="unfollow" 
                     onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    class="btn btn-secondary"
                     style="display: block;"
                 > Unfollow </button>
                 <button 
                     id="follow" 
                     onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    class="btn btn-primary"
                     style="display: none;"    
                 >Follow </button>
             {% else %}
                 <button 
                     id="follow" 
                     onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    class="btn btn-primary"
                     style="display: block;"    
                 >Follow </button>
                 <button 
                     id="unfollow" 
                     onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                    class="btn btn-secondary"
                     style="display: none;"
                 > Unfollow </button>
             {% endif %}
