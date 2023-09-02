@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 from .models import User, Post
 
@@ -15,8 +16,13 @@ def index(request):
         user = None
 
     posts = Post.objects.all()
+    page_posts = Paginator(posts, 4)
+
+    page_number = request.GET.get('page')
+    page_obj = page_posts.get_page(page_number)
+
     return render(request, "network/index.html", {
-        "posts": posts,
+        "posts": page_obj,
         "user": user
     })
 
