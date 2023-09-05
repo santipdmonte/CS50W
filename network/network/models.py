@@ -7,7 +7,7 @@ class User(AbstractUser):
     following = models.ManyToManyField('User', related_name='following_by', blank=True)
 
     def __str__(self):
-        return f"{self.username}"
+        return f"{self.username.capitalize()}"
     
     def count_followers(self):
         return self.followers.count()

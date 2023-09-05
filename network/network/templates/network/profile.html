@@ -4,43 +4,46 @@
 {% block body %}
 
     <!-- Profile -->
-    <div>
-        <h1>{{ profile.username }}</h1>
-        <p>{{ profile.email }}</p>
-        <p>{{ profile.date_joined }}</p>
-        <p>Followers: <span id="followers">{{ profile.count_followers }}</span></p>
-        <p>Following: <span id="folowing">{{ profile.count_following }}</span></p>
-        {% if user and user != profile%}
-            {% if is_following %}
-                <button 
-                    id="unfollow" 
-                    onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
-                    class="btn btn-secondary"
-                    style="display: block;"
-                > Unfollow </button>
-                <button 
-                    id="follow" 
-                    onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
-                    class="btn btn-primary"
-                    style="display: none;"    
-                >Follow </button>
-            {% else %}
-                <button 
-                    id="follow" 
-                    onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
-                    class="btn btn-primary"
-                    style="display: block;"    
-                >Follow </button>
-                <button 
-                    id="unfollow" 
-                    onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
-                    class="btn btn-secondary"
-                    style="display: none;"
-                > Unfollow </button>
+    <div class="d-flex justify-content-center">
+        <div class="w-75" style="width: 95%; max-width: 50rem;">
+            <h1>{{ profile.username }}</h1>
+            <p>{{ profile.email }}</p>
+            <div class="d-flex">
+                <p>Followers: <span id="followers">{{ profile.count_followers }}</span></p>
+                <p>Following: <span id="folowing">{{ profile.count_following }}</span></p>
+            </div>
+            {% if user and user != profile%}
+                {% if is_following %}
+                    <button 
+                        id="unfollow" 
+                        onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                        class="btn btn-secondary"
+                        style="display: block;"
+                    > Unfollow </button>
+                    <button 
+                        id="follow" 
+                        onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                        class="btn btn-primary"
+                        style="display: none;"    
+                    >Follow </button>
+                {% else %}
+                    <button 
+                        id="follow" 
+                        onclick="followOrUnfollow('follow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                        class="btn btn-primary"
+                        style="display: block;"    
+                    >Follow </button>
+                    <button 
+                        id="unfollow" 
+                        onclick="followOrUnfollow('unfollow','{{ user.id }}','{{ profile.id }}', '{{ profile.username }}')"
+                        class="btn btn-secondary"
+                        style="display: none;"
+                    > Unfollow </button>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
     </div>
-
+    
     <!-- Posts -->
     <div class="d-flex flex-wrap justify-content-center p-2">
         {% for post in posts %}
@@ -52,6 +55,7 @@
 
     <!-- Pagination -->
     {% include "network/pagination.html" %}
+    
 
 {% endblock %}
 
