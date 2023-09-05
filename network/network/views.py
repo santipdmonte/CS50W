@@ -15,11 +15,12 @@ def index(request):
     user = request.user
     if not user.is_authenticated:
         user = None
-        
-    posts = Post.objects.all().order_by('-created_at')
 
+    # Get all posts and order by most recent first
+    posts = Post.objects.all().order_by('-created_at')
+        
     # Add Pagination to the posts
-    page_posts = Paginator(posts, 4)
+    page_posts = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = page_posts.get_page(page_number)
 
@@ -36,6 +37,7 @@ def following(request):
     following = user.following.all()
 
     # User__in to check if the user is in the list of following
+    # Order the post by most recent first
     posts = Post.objects.filter(user__in = following).order_by('-created_at')
 
     # Add Pagination to the posts
@@ -106,8 +108,6 @@ def new_post(request):
         title = request.POST["title"]
         content = request.POST["content"]
 
-        print(f"{user} | {title} | {content}")
-
         # Attempt to upload the post
         try:
             post = Post(
@@ -143,12 +143,12 @@ def profile(request, username):
             user.following.add(user_to_follow)
             user_to_follow.followers.add(user)
         return JsonResponse(user_to_follow.serialize(), safe=False)
-        # return HttpResponse(status=204)  
 
+    # Gets the post from the profile and order by most recent
     profile = User.objects.get(username=username)
     posts = Post.objects.filter(user=profile).order_by('-created_at')
 
-        # Add Pagination to the posts
+    # Add Pagination to the posts
     page_posts = Paginator(posts, 4)
     page_number = request.GET.get('page')
     posts_obj = page_posts.get_page(page_number)
@@ -178,8 +178,6 @@ def postData(request, postId):
             post.liked_by.add(user)
 
         return JsonResponse(post.serialize(), safe=False)
-        # return HttpResponse(status=204)
-
     return HttpResponse(status=400)
 
 @csrf_exempt
@@ -200,7 +198,5 @@ def postEdit(request, postId):
             print("Error: User not allowed to edit this post")
 
         return JsonResponse(post.serialize(), safe=False)
-        # return HttpResponse(status=204)
-
     return HttpResponse(status=400)
     

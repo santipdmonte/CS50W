@@ -10,7 +10,9 @@
                 
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
+                        <!-- Like Counter -->
                         <p id="like-counter-{{post.id}}" class="pr-2">{{ post.count_likes }}</p>
+                        <!-- Like Btn -->
                         {% if user %}
                             {% if user in post.liked_by.all %}
                                 <a 
@@ -57,6 +59,7 @@
                         {% endif %}
                     </div>
 
+                    <!-- Username + Date -->
                     <div class="d-flex" style="color: grey">
                         <a href="{% url 'profile' username=post.user.username %}" style="color: grey">{{ post.user }}</a>
                         <p class="pl-2 pr-2">|</p>
