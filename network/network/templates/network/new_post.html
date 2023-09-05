@@ -2,15 +2,23 @@
 
 {% block body %}
 
-    <h2>New post</h2>
-    <form action="{% url 'new_post' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="new-post">Title</label>
-            <input class="form-control" type="text" name="title" placeholder="Title" required>
-            <label for="new-post">Content</label>
-            <textarea class="form-control" name="content" rows="3" placeholder="Content" required></textarea>
+    <div class="d-flex justify-content-center">
+        <div class="card w-75 m-5 shadow" style="width: 95%; max-width: 50rem;">
+            <div class="card-body">
+                <h2>New post</h2>
+                <form action="{% url 'new_post' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="new-post">Title</label>
+                        <input class="form-control" type="text" name="title" placeholder="Title" required>
+                        <label for="new-post">Content</label>
+                        <textarea class="form-control" name="content" rows="3" placeholder="Content" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
+
+    
 {% endblock %}

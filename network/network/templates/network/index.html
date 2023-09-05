@@ -3,28 +3,34 @@
 
 {% block body %}
 
-    <div class="d-flex justify-content-center">
-        <div class="w-75">
-            <!-- Posts -->
-            <div class="d-flex flex-wrap justify-content-center p-2">
-                
-                {% for post in posts %}
-                
-                    {% block post %}
+<div class="d-flex justify-content-center">
+    <div class="mt-3 mb-3 rounded shadow" style="width: 80%; max-width: 55rem; background-color:rgb(223, 223, 223);">
+
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- Posts -->
+                <div class="d-flex flex-wrap justify-content-center p-2">
                     
-                        {% include "network/post.html" %}
+                    {% for post in posts %}
                     
-                    {% endblock %}
-                
-                {% endfor %}
-                
+                        {% block post %}
+                        
+                            {% include "network/post.html" %}
+                        
+                        {% endblock %}
+                    
+                    {% endfor %}
+                    
+                </div>
+        
+                <!-- Pagination -->
+                {% include "network/pagination.html" %}
+        
             </div>
-    
-            <!-- Pagination -->
-            {% include "network/pagination.html" %}
-    
         </div>
+    
     </div>
+</div>
 
 
 

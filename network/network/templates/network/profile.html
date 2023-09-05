@@ -3,14 +3,17 @@
 
 {% block body %}
 
+<div class="d-flex justify-content-center">
+<div class="mt-3 mb-3 rounded shadow" style="width: 80%; max-width: 55rem; background-color:rgb(223, 223, 223);">
+
     <!-- Profile -->
     <div class="d-flex justify-content-center">
         <div class="w-75" style="width: 95%; max-width: 50rem;">
-            <div>
+            <div class="d-flex mt-3 justify-content-around align-items-center flex-wrap shadow rounded" style="height: 20vh; background-color: white;">
                 
                 <h1>{{ profile }}</h1>
                 
-                <div class="d-flex pt-">
+                <div class="d-flex pl-5">
                     <div class="d-flex flex-column align-items-center pr-3">
                         <p id="followers" style="height: 5px;">{{ profile.count_followers }}</p>
                         <p>Followers</p> 
@@ -70,7 +73,9 @@
 
     <!-- Pagination -->
     {% include "network/pagination.html" %}
-    
+
+</div>
+</div>  
 
 {% endblock %}
 
