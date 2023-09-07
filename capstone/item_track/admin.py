@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Item, Client, Category, Treatment, TransactionRecord
+from .models import User, Item, Client, Category, Treatment, TransactionRecord, Movemets
 
 # Register your models here.
 admin.site.register(User)
@@ -8,3 +8,4 @@ admin.site.register(Client)
 admin.site.register(Category)
 admin.site.register(Treatment)
 admin.site.register(TransactionRecord)
+admin.site.register(Movemets)
