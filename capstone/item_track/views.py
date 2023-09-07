@@ -15,6 +15,35 @@ def index(request):
         'treatments': treatments
     })
 
+def vet(request):
+    items = Item.objects.all()
+    treatments = Treatment.objects.all()
+
+    return render(request, "item_track/vet.html",{
+        'items': items,
+        'treatments': treatments
+    })
+
+def front_desk(request):
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        transaction_id = data['consult_id']
+
+        transaction = TransactionRecord.objects.get(id=transaction_id)
+        transaction.active = False
+        transaction.save()
+
+    consults = TransactionRecord.objects.filter(active=True)
+
+    # TODO add history
+    past_consults = TransactionRecord.objects.filter(active=False).order_by('-date')
+
+    return render(request, "item_track/front_desk.html",{
+        'consults': consults,
+        'past_consults': past_consults
+    })
+
 def transaction(request):
     if request.method == "POST":
         try:

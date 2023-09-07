@@ -1,0 +1,79 @@
+{% extends "item_track/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.3/rangeslider.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.3/rangeslider.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    
+    {% endblock %}
+
+    {% block main %}
+
+        <h2 class="mb-3">Front</h2>
+
+        <table class="table table-striped custome-table">
+            <thead>
+                <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for consult in consults %}
+                <div>
+                    <tr id="row-{{ consult.id }}">
+                        <td>
+                            <div class="d-flex flex-column justify-content-between">
+                            <span class="m-1">{{ consult.name }}</span>
+                            {% if consult.description %}
+                            <span class="m-1">[{{ consult.description }}]</span>
+                            {% endif %}
+                            <div>
+                                <button onclick="check_consult('{{ csrf_token }}','{{ consult.id }}')" type="submit" class="btn btn-outline-info btn-sm m-1">Check</button>
+                            </div>
+                        </td>
+                        <td colspan="2" class="custom-table">
+                            <table class="table">
+                                <tbody>
+                                    {% for element in consult.movements.all %}
+                                        <tr>
+                                            <td class="w-75">
+                                                {% if element.quantity > 1 and element.observation %}
+                                                    (x{{ element.quantity }}) {{ element.quantity }} [{{ element.observation }}]                                                    
+                                                {% elif element.observation %}
+                                                    {{ element.item }} [{{ element.observation }}]
+                                                {%else%}
+                                                    {{ element.item }} 
+                                                {% endif %}
+                                            </td class="w-25">
+                                            <td>${{ element.total }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td><b>Total: ${{ consult.total }}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </div>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'item_track/front_desk.js' %}"></script>
+{% endblock %}

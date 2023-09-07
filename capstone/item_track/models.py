@@ -89,6 +89,7 @@ class TransactionRecord(models.Model):
 class Movemets(models.Model):
     id = models.AutoField(primary_key=True)
     item = models.ForeignKey("Item", on_delete=models.CASCADE, related_name="movements", blank=True, null=True)
+    observation = models.CharField(max_length=256, blank=True, null=True)
     client = models.ForeignKey("Client", on_delete=models.CASCADE, related_name="movements", blank=True, null=True)
     treatment = models.ForeignKey("Treatment", on_delete=models.CASCADE, related_name="movements", blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
