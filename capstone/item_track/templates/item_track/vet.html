@@ -43,7 +43,7 @@
                     
                     <!-- Buttons -->
                     <div class="d-flex justify-content-between">
-                        <button type="button" value="Add" class="btn btn-primary" onclick="addRow()">Add +</button>
+                        <button id="add_btn" type="button" value="Add" class="btn btn-primary" onclick="addRow()">Add +</button>
                         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">
                             Observation
                         </button>
@@ -100,8 +100,9 @@
                     </button>
                 </div>
 
+                <!-- Client Modal -->
                 <div class="modal-body">
-                    <form onSubmit="send('{{ csrf_token }}')">
+                    <form onSubmit="send(event,'{{ csrf_token }}')">
                         <div class="form-group">
                             <label for="sendClientName">Client name:</label>
                             <input type="text" class="form-control" id="ClientName" required>
@@ -160,7 +161,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveChangesEditBtn">Save Changes</button>
+                <button type="button" class="btn btn-primary" id="saveChangesEditBtn" data-bs-dismiss="modal">Save Changes</button>
             </div>
             </div>
         </div>

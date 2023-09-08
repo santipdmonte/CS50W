@@ -4,6 +4,7 @@ from .models import User, Item, Client, Category, Treatment, TransactionRecord, 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from decimal import Decimal
 
 # Create your views here.
 def index(request):
@@ -25,6 +26,8 @@ def vet(request):
     })
 
 def front_desk(request):
+    items = Item.objects.all()
+    treatments = Treatment.objects.all()
 
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -33,6 +36,27 @@ def front_desk(request):
         transaction = TransactionRecord.objects.get(id=transaction_id)
         transaction.active = False
         transaction.save()
+    
+    elif request.method == "POST":
+        data = json.loads(request.body)
+        transaction_id = data['consult_id']
+
+        transaction = TransactionRecord.objects.get(id=transaction_id)
+
+        movement = Movemets(
+                    item = Item.objects.get(id=data['item_id']),
+                    quantity = data['amount'],
+                    price = data['price'],
+                    total = decimal(data['amount']) * float(data['price']),
+                    type = "Sell",
+                    TransactionRecord = transaction
+                )
+        movement.save()
+
+        transaction.total += movement.total
+        transaction.save()
+
+        return transaction
 
     consults = TransactionRecord.objects.filter(active=True)
 
@@ -41,7 +65,9 @@ def front_desk(request):
 
     return render(request, "item_track/front_desk.html",{
         'consults': consults,
-        'past_consults': past_consults
+        'past_consults': past_consults,
+        'items': items,
+        'treatments': treatments
     })
 
 def transaction(request):
@@ -66,7 +92,7 @@ def transaction(request):
                     item = Item.objects.get(id=movement['item_id']),
                     quantity = movement['amount'],
                     price = movement['price'],
-                    total = float(movement['amount']) * float(movement['price']),
+                    total = Decimal(movement['amount']) * Decimal(movement['price']),
                     type = "Sell",
                     TransactionRecord = transaction
                 )

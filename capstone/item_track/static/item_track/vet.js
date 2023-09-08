@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     inputItem.addEventListener('input', function() {
         const selectedItem = inputItem.value;
         const option = document.querySelector(`#datalistOptions option[value="${selectedItem}"]`);
-        
+
+        // Save as value the item_id
         inputItem_id.value = option.dataset.item_id;
 
         if (option && option.dataset.price) {
@@ -18,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
             inputPrice.value = '';
         }
     });
+
+    // document.querySelector('#add_btn').addEventListener('click', (event) => {
+    //     // Save as value the item_id
+    //     inputItem_id.value = option.dataset.item_id;
+    // });
 });
 
 // JavaScript to add the form to the table
@@ -98,34 +104,34 @@ function editRow(button) {
 
     // Save the edited values on modal save
     document.getElementById('saveChangesEditBtn').onclick = function() {
-    var editedAmount = document.getElementById('editAmount').value;
-    var editedItem = document.getElementById('editItem').value;
-    var editedObservation = document.getElementById('editObservation').value;
-    var editedPrice = document.getElementById('editPrice').value;
+        var editedAmount = document.getElementById('editAmount').value;
+        var editedItem = document.getElementById('editItem').value;
+        var editedObservation = document.getElementById('editObservation').value;
+        var editedPrice = document.getElementById('editPrice').value;
 
-    amountCell.innerHTML = editedAmount;
-    descriptionCell.innerHTML = editedItem;
-    if (observation){
-        observationCell.innerHTML = editedObservation;
-    }
-    else{
-        observationCell.innerHTML = '-';
-    }
-    priceCell.innerHTML = '$' + editedPrice;
+        amountCell.innerHTML = editedAmount;
+        descriptionCell.innerHTML = editedItem;
+        if (observationCell){
+            observationCell.innerHTML = editedObservation;
+        }
+        else{
+            observationCell.innerHTML = '-';
+        }
+        priceCell.innerHTML = '$' + editedPrice;
 
-    // Update the data attributes with the edited values
-    amountCell.setAttribute('data-amount', editedAmount);
-    descriptionCell.setAttribute('data-item', editedItem);
-    observationCell.setAttribute('data-observation', editedObservation);
-    priceCell.setAttribute('data-price', editedPrice);
+        // Update the data attributes with the edited values
+        amountCell.setAttribute('data-amount', editedAmount);
+        descriptionCell.setAttribute('data-item', editedItem);
+        observationCell.setAttribute('data-observation', editedObservation);
+        priceCell.setAttribute('data-price', editedPrice);
 
-    // Hide the modal
-    $('#editModal').modal('hide');
+        // Hide the modal
+        $('#editModal').modal('hide');
     };
 };
 
 
-function send(csrf_token){
+function send(event, csrf_token){
     // Save the table into a json
     var tableRows = document.querySelectorAll('#table tbody tr');
 
