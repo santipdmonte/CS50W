@@ -47,7 +47,7 @@ def front_desk(request):
                     item = Item.objects.get(id=data['item_id']),
                     quantity = data['amount'],
                     price = data['price'],
-                    total = decimal(data['amount']) * float(data['price']),
+                    total = Decimal(data['amount']) * Decimal(data['price']),
                     type = "Sell",
                     TransactionRecord = transaction
                 )
@@ -108,10 +108,6 @@ def transaction(request):
 
     if request.method == "PUT":
         pass
-
-
-
-
 
 
 def create_item(request):
