@@ -38,27 +38,31 @@ def front_desk(request):
         transaction.save()
     
     elif request.method == "POST":
-        data = json.loads(request.body)
-        transaction_id = data['consult_id']
+        try:
+            data = json.loads(request.body)
+            transaction_id = data['consult_id']
 
-        transaction = TransactionRecord.objects.get(id=transaction_id)
+            transaction = TransactionRecord.objects.get(id=transaction_id)
 
-        movement = Movemets(
-                    item = Item.objects.get(id=data['item_id']),
-                    quantity = data['amount'],
-                    price = data['price'],
-                    total = Decimal(data['amount']) * Decimal(data['price']),
-                    type = "Sell",
-                    TransactionRecord = transaction
-                )
-        movement.save()
+            movement = Movemets(
+                        item = Item.objects.get(id=data['item_id']),
+                        quantity = data['amount'],
+                        price = data['price'],
+                        total = Decimal(data['amount']) * Decimal(data['price']),
+                        type = "Sell",
+                        TransactionRecord = transaction
+                    )
+            movement.save()
 
-        transaction.total += movement.total
-        transaction.save()
+            transaction.total += movement.total
+            transaction.save()
 
-        return transaction
+            # return transaction.serialize()
+            return JsonResponse({'message': 'Datos procesados correctamente', 'transaction': transaction.serialize()})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Error en el formato JSON'}, status=400)
 
-    consults = TransactionRecord.objects.filter(active=True)
+    consults = TransactionRecord.objects.filter(active=True).order_by
 
     # TODO add history
     past_consults = TransactionRecord.objects.filter(active=False).order_by('-date')

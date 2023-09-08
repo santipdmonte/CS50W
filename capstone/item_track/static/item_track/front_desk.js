@@ -49,8 +49,6 @@ function check_consult(csrf_token, consult_id){
 }
 
 function addRow(button, consult_id, csrf_token){
-    console.log('addRow');
-
     // Clear the old values
     document.querySelector('#addAmount').value = 1;
     document.querySelector('#addItem').value = '';
@@ -68,8 +66,6 @@ function addRow(button, consult_id, csrf_token){
         var observation = document.querySelector('#addObservation').value;
         var price = document.querySelector('#addPrice').value;
 
-        console.log(consult_id, amount, item, observation, price);
-
         // Send to the POST request to the server
         fetch(`/front_desk`, {
             method: 'POST',
@@ -85,6 +81,34 @@ function addRow(button, consult_id, csrf_token){
                 price: price,
             })
         })
+        //Update the table with the new row
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            console.log(data.transaction); 
+
+            var transaction = data.transaction;
+
+            // Add new element to the table
+            element = transaction.movements[transaction.movements.length - 1];
+            var consultRow = document.querySelector('#row-' + consult_id);
+            var lastRow = consultRow.querySelector('tbody tr:last-child');
+            var newElementHTML = `
+            <tr>
+                <td>${element.item.name}</td>
+                <td>${element.item.price}</td>
+            </tr>
+            `;
+            lastRow.insertAdjacentHTML('beforebegin', newElementHTML);
+
+            // Update the total
+            document.querySelector(`#total-${consult_id}`).innerHTML = transaction.total;
+            
+        })
+        .catch(error => {
+            // Handle any errors that may occur during the fetch or JSON parsing
+            console.error('Error:', error);
+        });
+
 
         // amountCell.innerHTML = editedAmount;
         // descriptionCell.innerHTML = editedItem;

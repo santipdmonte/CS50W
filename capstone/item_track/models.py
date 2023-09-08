@@ -20,6 +20,25 @@ class Item(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    
+    def serialize(self):
+        if self.expiration_date is not None:
+            expiration_date = self.expiration_date.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            expiration_date = None
+
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            # "image": self.image,
+            # "category": self.category,
+            "price": self.price,
+            "stock": self.stock,
+            "expiration_date": expiration_date,
+            "active": self.active
+        }
 
 
 class Client(models.Model):
@@ -83,6 +102,34 @@ class TransactionRecord(models.Model):
 
     def __str__(self):
         return f"[{self.id}] {self.name} - {self.date.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    def serialize(self):
+        if self.payment_date is not None:
+            payment_date = self.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            payment_date = None
+
+        movements = [movement.serialize() for movement in self.movements.all()]
+
+        print(movements)
+
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "client": self.client,
+            # "treatments": self.treatments,
+            "date": self.date.strftime('%Y-%m-%d %H:%M:%S'),
+            "total": self.total,
+            "payment_method": self.payment_method,
+            "payment_status": self.payment_status,
+            "payment_date": payment_date,
+            "payment_amount": self.payment_amount,
+            "payment_reference": self.payment_reference,
+            "payment_comments": self.payment_comments,
+            "movements": movements,
+            "active": self.active
+        }
 
 
 
@@ -101,6 +148,21 @@ class Movemets(models.Model):
 
     def __str__(self):
         return f"{self.type}[{self.TransactionRecord.id}] - {self.item} - {self.quantity}"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "item": self.item.serialize(),
+            "observation": self.observation,
+            "client": self.client,
+            "treatment": self.treatment,
+            "date": self.date.strftime('%Y-%m-%d %H:%M:%S'),
+            "type": self.type,
+            "quantity": self.quantity,
+            "price": self.price,
+            "total": self.total,
+            # "TransactionRecord": self.TransactionRecord
+        }
 
 
 
