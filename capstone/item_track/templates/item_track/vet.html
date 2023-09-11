@@ -17,28 +17,28 @@
                 
                 <!-- Tabs -->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Shop</a>
+                    <li class="nav-treatment">
+                      <a class="nav-link active" aria-current="page" href="#">Treatments</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Treatments</a>
+                    <li class="nav-treatment">
+                      <a class="nav-link" href="#">Others</a>
                     </li>
                 </ul>
                 <br>
 
-                <div class="vet-form-item">
+                <div class="vet-form-treatment">
 
                     <!-- Inputs -->
                     <div class="d-flex pb-2">
-                        <input class="form-control mr-2" list="datalistOptions" id="item" placeholder="Type to search..." required>
+                        <input class="form-control mr-2" list="datalistOptions" id="treatment" placeholder="Type to search..." required>
                         <datalist id="datalistOptions">
-                            {% for item in items %}
-                            <option value="{{ item }}" data-item_id="{{ item.id }}" data-price="{{ item.price }}"></option>
+                            {% for treatment in treatments %}
+                            <option value="{{ treatment }}" data-treatment_id="{{ treatment.id }}" data-price="{{ treatment.price }}"></option>
                             {% endfor %}
                         </datalist>
                         <input class="form-control amount w-25" type="number" id="amount" name="amount" placeholder="Amount" value="1" min="1" required>
                     </div>
-                    <input type="hidden" id="item_id">
+                    <input type="hidden" id="treatment_id">
                     <input class="form-control w-25 price mb-2" type="number" id="price" name="price" min="0" placeholder="$Price..." required>
                     
                     <!-- Buttons -->
@@ -71,7 +71,7 @@
             <thead>
                 <tr>
                 <th scope="col">Amount</th>
-                <th scope="col">Item/Trearment</th>
+                <th scope="col">Trearment</th>
                 <th scope="col">Observation</th>
                 <th scope="col">Price</th>
                 <th scope="col"></th>
@@ -145,8 +145,8 @@
                     <input type="number" class="form-control" id="editAmount" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="editItem">Item:</label>
-                    <input type="text" class="form-control" id="editItem" disabled>
+                    <label for="editTreatment">Treatment:</label>
+                    <input type="text" class="form-control" id="editTreatment" disabled>
                 </div>
                 <div class="form-group">
                     <label for="editObservation">Observation:</label>

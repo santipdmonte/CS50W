@@ -70,9 +70,7 @@ def front_desk(request):
             return JsonResponse({'error': 'Error en el formato JSON'}, status=400)
 
     consults = TransactionRecord.objects.filter(active=True).order_by
-
     # TODO add history
-
     past_consults = TransactionRecord.objects.filter(active=False).order_by('-date')
 
     return render(request, "item_track/front_desk.html",{
@@ -81,6 +79,7 @@ def front_desk(request):
         'items': items,
         'treatments': treatments
     })
+
 
 def transaction(request):
     if request.method == "POST":
@@ -100,15 +99,10 @@ def transaction(request):
 
             # Create Movements
             for movement in data[1:]:
-                item = Item.objects.get(id=movement['item_id'])
-
-                item.stock = item.stock - int(movement['amount'])
-                item.save()
-                # TODO add restriction to stock
-
+                treatment = Treatment.objects.get(id=movement['treatment_id'])
 
                 movement = Movemets(
-                    item = item,
+                    treatment = treatment,
                     quantity = movement['amount'],
                     price = movement['price'],
                     total = Decimal(movement['amount']) * Decimal(movement['price']),

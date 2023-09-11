@@ -1,17 +1,17 @@
 //Listener to services-price input
-// Get the input elements and select the item element
+// Get the input elements and select the treatment
 document.addEventListener('DOMContentLoaded', function() {
-    inputItem = document.getElementById('item');
-    inputItem_id = document.getElementById('item_id');
+    inputTreatment = document.getElementById('treatment');
+    inputTreatment_id = document.getElementById('treatment_id');
     inputPrice = document.getElementById('price');
     
-    // Add an event listener to the inputItem element
-    inputItem.addEventListener('input', function() {
-        const selectedItem = inputItem.value;
-        const option = document.querySelector(`#datalistOptions option[value="${selectedItem}"]`);
+    // Add an event listener to the inputTreatment element
+    inputTreatment.addEventListener('input', function() {
+        const selectedTreatment = inputTreatment.value;
+        const option = document.querySelector(`#datalistOptions option[value="${selectedTreatment}"]`);
 
-        // Save as value the item_id
-        inputItem_id.value = option.dataset.item_id;
+        // Save as value the treatment_id
+        inputTreatment_id.value = option.dataset.treatment_id;
 
         if (option && option.dataset.price) {
             inputPrice.value = option.dataset.price;
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // document.querySelector('#add_btn').addEventListener('click', (event) => {
-    //     // Save as value the item_id
-    //     inputItem_id.value = option.dataset.item_id;
+    //     // Save as value the treatment_id
+    //     inputTreatment_id.value = option.dataset.treatment_id;
     // });
 });
 
@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function addRow() {
     // Get the values entered in the form
     var amount = document.getElementById('amount').value;
-    var item = document.getElementById('item').value;
+    var treatment = document.getElementById('treatment').value;
     var observation = document.getElementById('observationInput').value;
     var price = document.getElementById('price').value;
-    var item_id = document.getElementById('item_id').value;
+    var treatment_id = document.getElementById('treatment_id').value;
 
     // Create a new row in the table
     // var table = document.getElementById('table');
@@ -48,7 +48,7 @@ function addRow() {
     var actionsCell = row.insertCell();
 
     amountCell.innerHTML = amount;
-    descriptionCell.innerHTML = item;
+    descriptionCell.innerHTML = treatment;
     if (!observation){
     observationCell.innerHTML = '-';
     }
@@ -60,14 +60,14 @@ function addRow() {
 
     // Update the data attributes with the values
     amountCell.setAttribute('data-amount', amount);
-    descriptionCell.setAttribute('data-item', item);
-    descriptionCell.setAttribute('data-item_id', item_id);
+    descriptionCell.setAttribute('data-treatment', treatment);
+    descriptionCell.setAttribute('data-treatment_id', treatment_id);
     observationCell.setAttribute('data-observation', observation);
     priceCell.setAttribute('data-price', price);
 
     // Clear the form fields
     document.getElementById('amount').value = 1;
-    document.getElementById('item').value = '';
+    document.getElementById('treatment').value = '';
     document.getElementById('observationInput').value = '';
     document.getElementById('price').value = '';
 }
@@ -89,13 +89,13 @@ function editRow(button) {
 
     // Get the current values from the row
     var currentAmount = amountCell.getAttribute('data-amount');
-    var currentItem = descriptionCell.getAttribute('data-item');
+    var currentTreatment = descriptionCell.getAttribute('data-treatment');
     var currentObservation = observationCell.getAttribute('data-observation');
     var currentPrice = priceCell.getAttribute('data-price');
 
     // Set the values in the modal input fields
     document.getElementById('editAmount').value = currentAmount;
-    document.getElementById('editItem').value = currentItem;
+    document.getElementById('editTreatment').value = currentTreatment;
     document.getElementById('editObservation').value = currentObservation;
     document.getElementById('editPrice').value = currentPrice;
 
@@ -105,12 +105,12 @@ function editRow(button) {
     // Save the edited values on modal save
     document.getElementById('saveChangesEditBtn').onclick = function() {
         var editedAmount = document.getElementById('editAmount').value;
-        var editedItem = document.getElementById('editItem').value;
+        var editedTreatment = document.getElementById('editTreatment').value;
         var editedObservation = document.getElementById('editObservation').value;
         var editedPrice = document.getElementById('editPrice').value;
 
         amountCell.innerHTML = editedAmount;
-        descriptionCell.innerHTML = editedItem;
+        descriptionCell.innerHTML = editedTreatment;
         if (observationCell){
             observationCell.innerHTML = editedObservation;
         }
@@ -121,7 +121,7 @@ function editRow(button) {
 
         // Update the data attributes with the edited values
         amountCell.setAttribute('data-amount', editedAmount);
-        descriptionCell.setAttribute('data-item', editedItem);
+        descriptionCell.setAttribute('data-treatment', editedTreatment);
         observationCell.setAttribute('data-observation', editedObservation);
         priceCell.setAttribute('data-price', editedPrice);
 
@@ -147,15 +147,15 @@ function send(event, csrf_token){
         var row = tableRows[i];
         // Get the values from the row cells
         var amount = row.cells[0].getAttribute('data-amount');
-        var item = row.cells[1].getAttribute('data-item');
-        var item_id = row.cells[1].getAttribute('data-item_id');
+        var treatment = row.cells[1].getAttribute('data-treatment');
+        var treatment_id = row.cells[1].getAttribute('data-treatment_id');
         var observation = row.cells[2].getAttribute('data-observation');
         var price = row.cells[3].getAttribute('data-price');
 
         var rowData = {
             amount: amount,
-            item_id: item_id,
-            item: item,
+            treatment_id: treatment_id,
+            treatment: treatment,
             observation: observation,
             price: price
         };

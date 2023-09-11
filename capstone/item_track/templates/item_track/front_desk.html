@@ -36,12 +36,22 @@
                                     {% for element in consult.movements.all %}
                                         <tr>
                                             <td class="w-75">
-                                                {% if element.quantity > 1 and element.observation %}
-                                                    (x{{ element.quantity }}) {{ element.quantity }} [{{ element.observation }}]                                                    
-                                                {% elif element.observation %}
-                                                    {{ element.item }} [{{ element.observation }}]
-                                                {%else%}
-                                                    {{ element.item }} 
+                                                {% if element.item %}
+                                                    {% if element.quantity > 1 and element.observation %}
+                                                        (x{{ element.quantity }}) {{ element.item }} [{{ element.observation }}]                                                    
+                                                    {% elif element.observation %}
+                                                        {{ element.item }} [{{ element.observation }}]
+                                                    {%else%}
+                                                        {{ element.item }} 
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if element.quantity > 1 and element.observation %}
+                                                        (x{{ element.quantity }}) {{ element.treatment }} [{{ element.observation }}]                                                    
+                                                    {% elif element.observation %}
+                                                        {{ element.treatment }} [{{ element.observation }}]
+                                                    {%else%}
+                                                        {{ element.treatment }} 
+                                                    {% endif %}
                                                 {% endif %}
                                             </td class="w-25">
                                             <td>${{ element.total }}</td>
