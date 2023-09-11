@@ -83,6 +83,15 @@ class Treatment(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "price": self.price,
+            "active": self.active
+        }
 
 
 class TransactionRecord(models.Model):
@@ -151,12 +160,22 @@ class Movemets(models.Model):
         return f"{self.item} - {self.type} - {self.quantity}"
     
     def serialize(self):
+        if self.item:
+            item = self.item.serialize()
+        else: 
+            item = None
+
+        if self.treatment:
+            treatment = self.treatment.serialize()
+        else:
+            treatment = None
+
         return {
             "id": self.id,
-            "item": self.item.serialize(),
+            "item": item,
+            "treatment": treatment,
             "observation": self.observation,
             "client": self.client,
-            "treatment": self.treatment,
             "date": self.date.strftime('%Y-%m-%d %H:%M:%S'),
             "type": self.type,
             "quantity": self.quantity,
