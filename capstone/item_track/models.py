@@ -148,7 +148,7 @@ class Movemets(models.Model):
     TransactionRecord = models.ForeignKey("TransactionRecord", on_delete=models.CASCADE, related_name="movements", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.type}[{self.TransactionRecord.id}] - {self.item} - {self.quantity}"
+        return f"{self.item} - {self.type} - {self.quantity}"
     
     def serialize(self):
         return {

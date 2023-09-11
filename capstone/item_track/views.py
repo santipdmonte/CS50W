@@ -44,8 +44,15 @@ def front_desk(request):
 
             transaction = TransactionRecord.objects.get(id=transaction_id)
 
+            # Update Stock
+            item = Item.objects.get(id=data['item_id'])
+            item.stock = item.stock - int(data['amount'])
+            item.save()
+            # TODO add restriction to stock
+            
+            # Create Movements and add to transaction
             movement = Movemets(
-                        item = Item.objects.get(id=data['item_id']),
+                        item = item,
                         quantity = data['amount'],
                         price = data['price'],
                         total = Decimal(data['amount']) * Decimal(data['price']),
@@ -65,6 +72,7 @@ def front_desk(request):
     consults = TransactionRecord.objects.filter(active=True).order_by
 
     # TODO add history
+
     past_consults = TransactionRecord.objects.filter(active=False).order_by('-date')
 
     return render(request, "item_track/front_desk.html",{
@@ -77,6 +85,7 @@ def front_desk(request):
 def transaction(request):
     if request.method == "POST":
         try:
+            # data[0] clients data
             data = json.loads(request.body)
             print(data)
 
@@ -90,10 +99,16 @@ def transaction(request):
             transaction_total = 0
 
             # Create Movements
-                # data[0] clients data
             for movement in data[1:]:
+                item = Item.objects.get(id=movement['item_id'])
+
+                item.stock = item.stock - int(movement['amount'])
+                item.save()
+                # TODO add restriction to stock
+
+
                 movement = Movemets(
-                    item = Item.objects.get(id=movement['item_id']),
+                    item = item,
                     quantity = movement['amount'],
                     price = movement['price'],
                     total = Decimal(movement['amount']) * Decimal(movement['price']),
@@ -134,13 +149,22 @@ def update_item_by_id(request, item_id):
         print("Update")
         try:
             data = json.loads(request.body)
-            print(data)
 
+            # Update item stock and price
             item = Item.objects.get(id=item_id)
-            item.price = data['itemPrice']
+            item.price = Decimal(data['itemPrice'])
             item.stock = item.stock + int(data['itemAmount'])
             item.save()
 
+            # Create Movement
+            if data['itemAmount'] > 0:
+                movement = Movemets(
+                    item = item,
+                    quantity = data['itemAmount'],
+                    price = Decimal(data['itemPrice']),
+                    type = "Buy"
+                )
+                movement.save()
 
             return JsonResponse({'message': 'Datos procesados correctamente'})
         except json.JSONDecodeError:
