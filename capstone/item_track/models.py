@@ -9,6 +9,7 @@ class Item(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=256, blank=True, null=True)
+    barcode = models.CharField(max_length=64, blank=True, null=True)
     image = models.ImageField(upload_to="item_track/images", blank=True, null=True)
     category = models.ManyToManyField("Category", blank=True, related_name="items")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

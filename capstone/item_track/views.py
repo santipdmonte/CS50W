@@ -114,6 +114,40 @@ def transaction(request):
         pass
 
 
+def manage(request):
+        items = Item.objects.all()
+        return render(request, "item_track/manage.html",{
+        'items': items
+        # 'treatments': treatments
+    })
+
+def item_by_barcode(request, barcode):
+    try:
+        item = Item.objects.get(barcode=barcode)
+        return JsonResponse(item.serialize())
+    except Item.DoesNotExist:
+        return JsonResponse({'error': 'Producto no encontrado'}, status=404)
+
+
+def update_item_by_id(request, item_id):
+    if request.method == 'PUT':
+        print("Update")
+        try:
+            data = json.loads(request.body)
+            print(data)
+
+            item = Item.objects.get(id=item_id)
+            item.price = data['itemPrice']
+            item.stock = item.stock + int(data['itemAmount'])
+            item.save()
+
+
+            return JsonResponse({'message': 'Datos procesados correctamente'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Error en el formato JSON'}, status=400)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
 def create_item(request):
     if request.method == "POST":
         pass
