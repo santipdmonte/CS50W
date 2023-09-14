@@ -8,6 +8,7 @@ urlpatterns = [
 	path("front_desk", views.front_desk, name="front_desk"),
     path("transaction", views.transaction, name="transaction"),
     path("manage", views.manage, name="manage"),
+    path("status", views.status, name="status"),
     path("item/barcode/<str:barcode>", views.item_by_barcode, name="barcode"),
     path("item/update/<str:item_id>", views.update_item_by_id, name="update_item_by_id"),
     path("transaction/<int:transaction_id>", views.transaction, name="transaction_id"),

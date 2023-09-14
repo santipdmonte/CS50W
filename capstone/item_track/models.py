@@ -14,6 +14,7 @@ class Item(models.Model):
     category = models.ManyToManyField("Category", blank=True, related_name="items")
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     stock = models.IntegerField(blank=True, null=True)
+    stock_min = models.IntegerField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     expiration_date = models.DateTimeField(blank=True, null=True)

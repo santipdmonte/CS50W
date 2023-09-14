@@ -1,0 +1,15 @@
+.even-row {
+    background-color: #ECECEC; /* Color para filas pares */
+}
+
+.odd-row {
+    background-color: #FFFFFF; /* Color para filas impares */
+}
+
+.out-stock{
+    color: red;
+}
+
+.hidden-row {
+    visibility: hidden;
+}

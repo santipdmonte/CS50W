@@ -130,6 +130,7 @@ def manage(request):
         # 'treatments': treatments
     })
 
+
 def item_by_barcode(request, barcode):
     try:
         item = Item.objects.get(barcode=barcode)
@@ -165,6 +166,15 @@ def update_item_by_id(request, item_id):
             return JsonResponse({'error': 'Error en el formato JSON'}, status=400)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+
+def status(request):
+    items = Item.objects.all()
+
+    items = items.order_by('stock')
+
+    return render(request, "item_track/status.html",{
+        'items': items,
+    })
 
 def create_item(request):
     if request.method == "POST":
