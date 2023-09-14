@@ -5,136 +5,140 @@
 
     {% block main %}
 
-        <h2 class="mb-3">Front</h2>
-
-        <table class="table table-striped custome-table">
-            <thead>
-                <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Price</th>
-                </tr>
-            </thead>
-
-            <tbody>
-            {% for consult in consults %}
-                <div>
-                    <tr id="row-{{ consult.id }}">
-                        <td>
-                            <div class="d-flex flex-column justify-content-between">
-                            <span class="m-1">{{ consult.name }}</span>
-                            {% if consult.description %}
-                            <span class="m-1">[{{ consult.description }}]</span>
-                            {% endif %}
-                            <div>
-                                <button onclick="check_consult('{{ csrf_token }}','{{ consult.id }}')" type="submit" class="btn btn-outline-info btn-sm m-1">Check</button>
-                            </div>
-                        </td>
-                        <td colspan="2" class="custom-table">
-                            <table class="table">
-                                <tbody>
-                                    {% for element in consult.movements.all %}
-                                        <tr>
-                                            <td class="w-75">
-                                                <!-- Item -->
-                                                {% if element.item %}
-
-                                                    {% if element.quantity > 1 and element.observation %}
-                                                        (x{{ element.quantity }}) {{ element.item }} [{{ element.observation }}]                                                    
-                                                    {% elif element.observation %}
-                                                        {{ element.item }} [{{ element.observation }}]
-                                                    {%else%}
-                                                        {{ element.item }} 
-                                                    {% endif %}
-
-                                                <!-- Treatment -->
-                                                {% else %}
-
-                                                    {% if element.quantity > 1 and element.observation %}
-                                                        (x{{ element.quantity }}) {{ element.treatment }} [{{ element.observation }}]                                                    
-                                                    {% elif element.observation %}
-                                                        {{ element.treatment }} [{{ element.observation }}]
-                                                    {%else%}
-                                                        {{ element.treatment }} 
-                                                    {% endif %}
-
-                                                {% endif %}
-                                            </td class="w-25">
-                                            <td>${{ element.total }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tr>
-                                        <td>
-                                            <!-- Trigger Modal Add -->
-                                            <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"
-                                            style="cursor: pointer" 
-                                            onclick="addRow(this, '{{ consult.id }}', '{{ csrf_token }}')">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                            </svg>
-                                        </td>
-                                        <td><b>Total: <span id="total-{{ consult.id }}">${{ consult.total }}</span></b></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </div>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="d-flex justify-content-center">
+        <div class="w-75" style="max-width: 1200px;">
+                <h2 class="mb-3">Front</h2>
         
-        <!-- Modal Add -->
-        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Item</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Form -->
-                    <form>
+                <table class="table table-striped custome-table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        </tr>
+                    </thead>
         
-                        <div class="vet-form-item">
+                    <tbody>
+                    {% for consult in consults %}
+                        <div>
+                            <tr id="row-{{ consult.id }}">
+                                <td>
+                                    <div class="d-flex flex-column justify-content-between">
+                                    <span class="m-1">{{ consult.name }}</span>
+                                    {% if consult.description %}
+                                    <span class="m-1">[{{ consult.description }}]</span>
+                                    {% endif %}
+                                    <div>
+                                        <button onclick="check_consult('{{ csrf_token }}','{{ consult.id }}')" type="submit" class="btn btn-outline-info btn-sm m-1">Check</button>
+                                    </div>
+                                </td>
+                                <td colspan="2" class="custom-table">
+                                    <table class="table">
+                                        <tbody>
+                                            {% for element in consult.movements.all %}
+                                                <tr>
+                                                    <td class="w-75">
+                                                        <!-- Item -->
+                                                        {% if element.item %}
         
-                            <!-- Inputs -->
-                            <input class="form-control mb-2" id="addBarcode" type="text" placeholder="Codebar...">
-                            <div class="d-flex pb-2">
-                                <input class="form-control mr-2" list="datalistOptions" id="addItem" placeholder="Type to search..." required>
-                                <datalist id="datalistOptions">
-                                    {% for item in items %}
-                                    <option value="{{ item }}" data-item_id="{{ item.id }}" data-price="{{ item.price }}"></option>
-                                    {% endfor %}
-                                </datalist>
-                                <input class="form-control amount w-25" type="number" id="addAmount" name="amount" placeholder="Amount" value="1" min="1" required>
-                            </div>
-                            <input type="hidden" id="item_id">
-                            <input class="form-control w-25 price mb-2" type="number" id="addPrice" name="price" min="0" placeholder="$Price..." required>
-                            
-                            <!-- Buttons -->
-                            <div class="d-flex justify-content-between">
-                                
-                                <button class="btn btn-secondary mb-2" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">
-                                    Observation
-                                </button>
-                            </div>
+                                                            {% if element.quantity > 1 and element.observation %}
+                                                                (x{{ element.quantity }}) {{ element.item }} [{{ element.observation }}]                                                    
+                                                            {% elif element.observation %}
+                                                                {{ element.item }} [{{ element.observation }}]
+                                                            {%else%}
+                                                                {{ element.item }} 
+                                                            {% endif %}
+        
+                                                        <!-- Treatment -->
+                                                        {% else %}
+        
+                                                            {% if element.quantity > 1 and element.observation %}
+                                                                (x{{ element.quantity }}) {{ element.treatment }} [{{ element.observation }}]                                                    
+                                                            {% elif element.observation %}
+                                                                {{ element.treatment }} [{{ element.observation }}]
+                                                            {%else%}
+                                                                {{ element.treatment }} 
+                                                            {% endif %}
+        
+                                                        {% endif %}
+                                                    </td class="w-25">
+                                                    <td>${{ element.total }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td>
+                                                    <!-- Trigger Modal Add -->
+                                                    <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"
+                                                    style="cursor: pointer" 
+                                                    onclick="addRow(this, '{{ consult.id }}', '{{ csrf_token }}')">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                                    </svg>
+                                                </td>
+                                                <td><b>Total: <span id="total-{{ consult.id }}">${{ consult.total }}</span></b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
                         </div>
-            
-                        <!-- Observation input -->
-                        <div class="collapse" id="observationCollapse">
-                            <input type="text" class="form-control" id="addObservation" name="observaciones" placeholder="Observations...">
+                    {% endfor %}
+                    </tbody>
+                </table>
+                
+                <!-- Modal Add -->
+                <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Item</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-            
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="saveChangesEditBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add +</button>
+                        <div class="modal-body">
+                            <!-- Form -->
+                            <form>
+                
+                                <div class="vet-form-item">
+                
+                                    <!-- Inputs -->
+                                    <input class="form-control mb-2" id="addBarcode" type="text" placeholder="Codebar...">
+                                    <div class="d-flex pb-2">
+                                        <input class="form-control mr-2" list="datalistOptions" id="addItem" placeholder="Type to search..." required>
+                                        <datalist id="datalistOptions">
+                                            {% for item in items %}
+                                            <option value="{{ item }}" data-item_id="{{ item.id }}" data-price="{{ item.price }}"></option>
+                                            {% endfor %}
+                                        </datalist>
+                                        <input class="form-control amount w-25" type="number" id="addAmount" name="amount" placeholder="Amount" value="1" min="1" required>
+                                    </div>
+                                    <input type="hidden" id="item_id">
+                                    <input class="form-control w-25 price mb-2" type="number" id="addPrice" name="price" min="0" placeholder="$Price..." required>
+                                    
+                                    <!-- Buttons -->
+                                    <div class="d-flex justify-content-between">
+                                        
+                                        <button class="btn btn-secondary mb-2" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">
+                                            Observation
+                                        </button>
+                                    </div>
+                                </div>
+                    
+                                <!-- Observation input -->
+                                <div class="collapse" id="observationCollapse">
+                                    <input type="text" class="form-control" id="addObservation" name="observaciones" placeholder="Observations...">
+                                </div>
+                    
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="saveChangesEditBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add +</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
 
     {% endblock %}
