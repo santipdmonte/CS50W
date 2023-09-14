@@ -55,14 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
           .catch(error => {
             console.log('Hubo un error:', error);
           });
-    
-
     });
-
-    // document.querySelector('#add_btn').addEventListener('click', (event) => {
-    //     // Save as value the item_id
-    //     inputItem_id.value = option.dataset.item_id;
-    // });
 });
 
 function saveChanges(csrf_token){
@@ -96,12 +89,6 @@ function saveChanges(csrf_token){
         // Add alert to the form
         const form = document.querySelector('form');
         form.appendChild(successAlert);
-
-        // Clean the alert after 3 seconds
-        // setTimeout(() => {
-        //     form.removeChild(successAlert);
-        //     cancelChanges();
-        // }, 3000);
 
         cancelChanges()});
 }

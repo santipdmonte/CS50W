@@ -17,7 +17,7 @@
             </thead>
 
             <tbody>
-                {% for consult in consults %}
+            {% for consult in consults %}
                 <div>
                     <tr id="row-{{ consult.id }}">
                         <td>
@@ -36,7 +36,9 @@
                                     {% for element in consult.movements.all %}
                                         <tr>
                                             <td class="w-75">
+                                                <!-- Item -->
                                                 {% if element.item %}
+
                                                     {% if element.quantity > 1 and element.observation %}
                                                         (x{{ element.quantity }}) {{ element.item }} [{{ element.observation }}]                                                    
                                                     {% elif element.observation %}
@@ -44,7 +46,10 @@
                                                     {%else%}
                                                         {{ element.item }} 
                                                     {% endif %}
+
+                                                <!-- Treatment -->
                                                 {% else %}
+
                                                     {% if element.quantity > 1 and element.observation %}
                                                         (x{{ element.quantity }}) {{ element.treatment }} [{{ element.observation }}]                                                    
                                                     {% elif element.observation %}
@@ -52,6 +57,7 @@
                                                     {%else%}
                                                         {{ element.treatment }} 
                                                     {% endif %}
+
                                                 {% endif %}
                                             </td class="w-25">
                                             <td>${{ element.total }}</td>
@@ -74,7 +80,7 @@
                         </td>
                     </tr>
                 </div>
-                {% endfor %}
+            {% endfor %}
             </tbody>
         </table>
         
@@ -89,21 +95,11 @@
                 <div class="modal-body">
                     <!-- Form -->
                     <form>
-
-                        <!-- Tabs -->
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                              <a class="nav-link active" aria-current="page" href="#">Shop</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#">Treatments</a>
-                            </li>
-                        </ul>
-                        <br>
         
                         <div class="vet-form-item">
         
                             <!-- Inputs -->
+                            <input class="form-control mb-2" id="addBarcode" type="text" placeholder="Codebar...">
                             <div class="d-flex pb-2">
                                 <input class="form-control mr-2" list="datalistOptions" id="addItem" placeholder="Type to search..." required>
                                 <datalist id="datalistOptions">

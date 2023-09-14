@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     inputItem = document.getElementById('addItem');
     inputItem_id = document.getElementById('item_id');
     inputPrice = document.getElementById('addPrice');
+    inputBarcode = document.getElementById('addBarcode');
     
     // Add an event listener to the inputItem element
     inputItem.addEventListener('input', function() {
@@ -12,18 +13,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Save as value the item_id
         inputItem_id.value = option.dataset.item_id;
+        inputBarcode.value = option.dataset.barcode;
 
         if (option && option.dataset.price) {
             inputPrice.value = option.dataset.price;
         } else {
             inputPrice.value = '';
         }
+
+        if (option && option.dataset.barcode) {
+            inputBarcode.value = option.dataset.barcode;
+        } else {
+            inputBarcode.value = '';
+        }
     });
 
-    // document.querySelector('#add_btn').addEventListener('click', (event) => {
-    //     // Save as value the item_id
-    //     inputItem_id.value = option.dataset.item_id;
-    // });
+    inputBarcode.addEventListener('input', function() {
+        const selectedBarcode = inputBarcode.value;
+
+        console.log(selectedBarcode);
+        
+        fetch(`/item/barcode/${selectedBarcode}`)
+        .then(response => {
+            if (!response.ok) {
+                inputItem.value = '';
+                inputItem_id.value = '';
+                inputPrice.value = '';
+                throw new Error('No se encontró el artículo.');
+            }
+            return response.json();
+          })
+          .then(item => {
+            // If fund the item
+            if (item) {
+              inputItem.value = item.name;
+              inputItem_id.value = item.id;
+              inputPrice.value = item.price;
+              console.log(item);
+            } 
+          })
+          .catch(error => {
+            console.log('Hubo un error:', error);
+          });
+    });
 });
 
 function check_consult(csrf_token, consult_id){
@@ -54,9 +86,15 @@ function addRow(button, consult_id, csrf_token){
     document.querySelector('#addItem').value = '';
     document.querySelector('#addObservation').value = '';
     document.querySelector('#addPrice').value = '';
+    inputBarcode.value = '';
 
     // Show the modal
     $('#addModal').modal('show');
+
+    // Focus the barcode
+    $('#addModal').on('shown.bs.modal', function () {
+        inputBarcode.focus();
+    });
 
     // Save the edited values on modal save
     document.querySelector('#saveChangesEditBtn').onclick = function() {
