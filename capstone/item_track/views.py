@@ -172,8 +172,13 @@ def status(request):
 
     items = items.order_by('stock')
 
+    # To send the data as JSON for print the inform
+    # items_list = list(items.values()) 
+    # items_json = json.dumps(items_list)
+
     return render(request, "item_track/status.html",{
         'items': items,
+        # 'items_json': items_json
     })
 
 def create_item(request):
