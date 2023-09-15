@@ -160,6 +160,23 @@ class Movemets(models.Model):
     def __str__(self):
         return f"{self.item} - {self.type} - {self.quantity}"
     
+    def show(self):
+        show_amount = ""
+        if self.quantity > 1:
+            show_amount = (f"(x{self.quantity})")
+        
+        show_observation = ""
+        if self.observation:
+            show_observation = f"[{self.observation}]"
+
+        show_element = ''
+        if self.item:
+            show_element = self.item.name
+        elif self.treatment:
+            show_element = self.treatment.name
+
+        return f"{show_amount} {show_element} {show_observation}"
+    
     def serialize(self):
         if self.item:
             item = self.item.serialize()

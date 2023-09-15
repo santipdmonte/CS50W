@@ -25,6 +25,7 @@ def vet(request):
         'treatments': treatments
     })
 
+
 def front_desk(request):
     items = Item.objects.all()
     treatments = Treatment.objects.all()
@@ -57,6 +58,7 @@ def front_desk(request):
                         price = data['price'],
                         total = Decimal(data['amount']) * Decimal(data['price']),
                         type = "Sell",
+                        observation = data['observation'],
                         TransactionRecord = transaction
                     )
             movement.save()
@@ -86,7 +88,6 @@ def transaction(request):
         try:
             # data[0] clients data
             data = json.loads(request.body)
-            print(data)
 
             # Create transaction
             transaction = TransactionRecord(

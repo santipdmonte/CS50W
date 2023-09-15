@@ -130,12 +130,23 @@ function addRow(button, consult_id, csrf_token){
             element = transaction.movements[transaction.movements.length - 1];
             var consultRow = document.querySelector('#row-' + consult_id);
             var lastRow = consultRow.querySelector('tbody tr:last-child');
+
+            var show_amount = "";
+            if (amount > 1) {
+                show_amount = `(x${amount})`;
+            }
+        
+            var show_observation = "";
+            if (observation) {
+                show_observation = `[${observation}]`;
+            }
+
             var newElementHTML = `
-            <tr>
-                <td>${element.item.name}</td>
-                <td>${element.item.price}</td>
-            </tr>
-            `;
+                <tr>
+                    <td>${show_amount} ${element.item.name} ${show_observation}</td>
+                    <td>$${(element.item.price * amount).toFixed(2)}</td>
+                </tr>
+                `;
             lastRow.insertAdjacentHTML('beforebegin', newElementHTML);
 
             // Update the total

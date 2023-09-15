@@ -7,9 +7,9 @@
 
         <div class="d-flex justify-content-center">
         <div class="w-75" style="max-width: 1200px;">
-                <h2 class="mb-3">Front</h2>
+                <h1 class="mb-4 mt-2">Front Desk</h1>
         
-                <table class="table table-striped custome-table">
+                <table class="table table-striped custome-table shadow">
                     <thead>
                         <tr>
                         <th scope="col">Name</th>
@@ -38,29 +38,9 @@
                                             {% for element in consult.movements.all %}
                                                 <tr>
                                                     <td class="w-75">
-                                                        <!-- Item -->
-                                                        {% if element.item %}
+                                                        <!-- Show Element -->
+                                                        {{element.show}}
         
-                                                            {% if element.quantity > 1 and element.observation %}
-                                                                (x{{ element.quantity }}) {{ element.item }} [{{ element.observation }}]                                                    
-                                                            {% elif element.observation %}
-                                                                {{ element.item }} [{{ element.observation }}]
-                                                            {%else%}
-                                                                {{ element.item }} 
-                                                            {% endif %}
-        
-                                                        <!-- Treatment -->
-                                                        {% else %}
-        
-                                                            {% if element.quantity > 1 and element.observation %}
-                                                                (x{{ element.quantity }}) {{ element.treatment }} [{{ element.observation }}]                                                    
-                                                            {% elif element.observation %}
-                                                                {{ element.treatment }} [{{ element.observation }}]
-                                                            {%else%}
-                                                                {{ element.treatment }} 
-                                                            {% endif %}
-        
-                                                        {% endif %}
                                                     </td class="w-25">
                                                     <td>${{ element.total }}</td>
                                                 </tr>
@@ -116,7 +96,6 @@
                                     
                                     <!-- Buttons -->
                                     <div class="d-flex justify-content-between">
-                                        
                                         <button class="btn btn-secondary mb-2" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">
                                             Observation
                                         </button>
