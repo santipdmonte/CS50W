@@ -11,9 +11,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedItem = inputItem.value;
         const option = document.querySelector(`#datalistOptions option[value="${selectedItem}"]`);
 
+        // Alert if the stock is lower than the minimum
+        if (option && (option.dataset.stock < 1)) {
+            alert(`${selectedItem} NO STOCK! \nStock: ${option.dataset.stock}`);
+            $('#addModal').modal('hide');
+
+        }
+        else if (option && (option.dataset.stock)) {
+            document.querySelector('#addAmount').max = option.dataset.stock;
+            if (option && (parseInt(option.dataset.stock) <= parseInt(option.dataset.stock_min))) {
+                alert(`LOW STOCK! \nStock: ${option.dataset.stock}`);
+            }
+        }
+        
+        
         // Save as value the item_id
         inputItem_id.value = option.dataset.item_id;
         inputBarcode.value = option.dataset.barcode;
+
 
         if (option && option.dataset.price) {
             inputPrice.value = option.dataset.price;
@@ -95,9 +110,9 @@ function addRow(button, consult_id, csrf_token){
     $('#addModal').on('shown.bs.modal', function () {
         inputBarcode.focus();
     });
-
-    // Save the edited values on modal save
-    document.querySelector('#saveChangesEditBtn').onclick = function() {
+    confirmAddBtn
+    // Save values
+    document.querySelector('#confirmAddBtn').onclick = function() {
         var amount = document.querySelector('#addAmount').value;
         var item = document.querySelector('#addItem').value;
         var item_id = document.querySelector('#item_id').value;

@@ -86,7 +86,13 @@
                                         <input class="form-control mr-2" list="datalistOptions" id="addItem" placeholder="Type to search..." required>
                                         <datalist id="datalistOptions">
                                             {% for item in items %}
-                                            <option value="{{ item }}" data-item_id="{{ item.id }}" data-price="{{ item.price }}"></option>
+                                            <option 
+                                                value="{{ item }}" 
+                                                data-item_id="{{ item.id }}" 
+                                                data-price="{{ item.price }}"
+                                                data-stock="{{ item.stock }}"
+                                                data-stock_min="{{ item.stock_min }}"
+                                            ></option>
                                             {% endfor %}
                                         </datalist>
                                         <input class="form-control amount w-25" type="number" id="addAmount" name="amount" placeholder="Amount" value="1" min="1" required>
@@ -109,7 +115,7 @@
                     
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button id="saveChangesEditBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add +</button>
+                                    <button id="confirmAddBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add +</button>
                                 </div>
                             </form>
                         </div>

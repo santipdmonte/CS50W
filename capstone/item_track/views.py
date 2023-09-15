@@ -48,6 +48,8 @@ def front_desk(request):
             # Update Stock
             item = Item.objects.get(id=data['item_id'])
             item.stock = item.stock - int(data['amount'])
+            if item.stock < 0:
+                return JsonResponse({'error': 'No hay suficiente stock'}, status=400)
             item.save()
             # TODO add restriction to stock
             
