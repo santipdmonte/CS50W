@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     inputItem_id = document.getElementById('item_id');
     inputPrice = document.getElementById('addPrice');
     inputBarcode = document.getElementById('addBarcode');
+    inputAddAmount = document.getElementById('addAmount');
     
     // Add an event listener to the inputItem element
     inputItem.addEventListener('input', function() {
@@ -14,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Save as value the item_id
         inputItem_id.value = option.dataset.item_id;
         inputBarcode.value = option.dataset.barcode;
+
+        if (option){
+            inputAddAmount.focus();
+        }
 
         if (option && option.dataset.price) {
             inputPrice.value = option.dataset.price;
@@ -49,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
               inputItem.value = item.name;
               inputItem_id.value = item.id;
               inputPrice.value = item.price;
+              inputAddAmount.focus();
               console.log(item);
             } 
           })
