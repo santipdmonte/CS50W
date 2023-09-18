@@ -155,7 +155,7 @@ def update_item_by_id(request, item_id):
             item.save()
 
             # Create Movement
-            if data['itemAmount'] > 0:
+            if int(data['itemAmount']) > 0:
                 movement = Movemets(
                     item = item,
                     quantity = data['itemAmount'],
