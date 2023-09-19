@@ -65,24 +65,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 function validate_stock(item, stock, stock_min) {
+
+    // No stock
     if (stock < 1) {
         alert(`${item} NO STOCK! \nStock: ${stock}`);
         $('#addModal').modal('hide');
 
     }
+    // Low Stock
     else if (stock) {
         document.querySelector('#addAmount').max = stock;
         if (parseInt(stock) <= parseInt(stock_min)) {
             alert(`LOW STOCK! \nStock: ${stock}`);
         }
     }
+
 }
+
 
 function check_consult(csrf_token, consult_id){
 
     row = document.querySelector(`#row-${consult_id}`);
-
     row.style.display = 'none';
 
     // Send to the PUT request to the server
@@ -98,8 +103,8 @@ function check_consult(csrf_token, consult_id){
     })
     .then(response => response.json())
     .catch(error => console.log(error))
-
 }
+
 
 function addRow(button, consult_id, csrf_token){
     // Clear the old values
@@ -183,3 +188,45 @@ function addRow(button, consult_id, csrf_token){
         $('#addModal').modal('hide');
     };
 };
+
+var selected_cosnult_id = null;
+
+function clickrow(event, id, consult_id){
+    var clickedRow = event.currentTarget;
+    var columnInRow = clickedRow.querySelector('td');
+    
+    // Select the row. If the row is selected, unselect it
+    if (columnInRow.style.backgroundColor === 'red') {
+        columnInRow.style.backgroundColor = '';
+        clickedRow.classList.remove('selected-row');
+    } else {
+        columnInRow.style.backgroundColor = 'red';
+        clickedRow.classList.add('selected-row');
+    }
+    
+    // Get all the selected rows
+    var allRows = document.querySelectorAll('.selected-row');
+
+    // If click in a new consult delte the selected-row class
+    if (selected_cosnult_id != null && selected_cosnult_id != consult_id) {
+
+        allRows.forEach(function(row) {
+            var columnInCurrentRow = row.querySelector('td');
+            columnInCurrentRow.style.backgroundColor = '';
+            row.classList.remove('selected-row');
+        });
+    }
+    // Update the consult_id of the selected row
+    selected_cosnult_id = consult_id;
+
+    // Show/hide the delete button
+    if (allRows.length > 0 ){
+        document.querySelector(`#delete-${consult_id}`).style.display = 'block';
+    } else {
+        document.querySelector(`#delete-${consult_id}`).style.display = 'none';
+    }
+}
+
+function deleteRow(event, consult_id, csrf_token){
+    console.log('deleteRows');
+}
