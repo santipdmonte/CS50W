@@ -5,30 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
     inputItem_id = document.getElementById('item_id');
     inputPrice = document.getElementById('addPrice');
     inputBarcode = document.getElementById('addBarcode');
+    inputAmount = document.getElementById('addAmount');
     
     // Add an event listener to the inputItem element
     inputItem.addEventListener('input', function() {
         const selectedItem = inputItem.value;
         const option = document.querySelector(`#datalistOptions option[value="${selectedItem}"]`);
 
-        // Alert if the stock is lower than the minimum
-        if (option && (option.dataset.stock < 1)) {
-            alert(`${selectedItem} NO STOCK! \nStock: ${option.dataset.stock}`);
-            $('#addModal').modal('hide');
-
+        // Reset Amount Value
+        if (option){
+            inputAmount.value = 1;
+            validate_stock(selectedItem, option.dataset.stock, option.dataset.stock_min);
         }
-        else if (option && (option.dataset.stock)) {
-            document.querySelector('#addAmount').max = option.dataset.stock;
-            if (option && (parseInt(option.dataset.stock) <= parseInt(option.dataset.stock_min))) {
-                alert(`LOW STOCK! \nStock: ${option.dataset.stock}`);
-            }
-        }
-        
-        
+    
         // Save as value the item_id
         inputItem_id.value = option.dataset.item_id;
         inputBarcode.value = option.dataset.barcode;
-
 
         if (option && option.dataset.price) {
             inputPrice.value = option.dataset.price;
@@ -45,8 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     inputBarcode.addEventListener('input', function() {
         const selectedBarcode = inputBarcode.value;
-
-        console.log(selectedBarcode);
         
         fetch(`/item/barcode/${selectedBarcode}`)
         .then(response => {
@@ -54,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 inputItem.value = '';
                 inputItem_id.value = '';
                 inputPrice.value = '';
+                inputAmount.value = 1;
                 throw new Error('No se encontró el artículo.');
             }
             return response.json();
@@ -64,7 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
               inputItem.value = item.name;
               inputItem_id.value = item.id;
               inputPrice.value = item.price;
-              console.log(item);
+              inputAmount.value = 1;
+              validate_stock(item.name, item.stock, item.stock_min);
             } 
           })
           .catch(error => {
@@ -72,6 +64,20 @@ document.addEventListener('DOMContentLoaded', function() {
           });
     });
 });
+
+function validate_stock(item, stock, stock_min) {
+    if (stock < 1) {
+        alert(`${item} NO STOCK! \nStock: ${stock}`);
+        $('#addModal').modal('hide');
+
+    }
+    else if (stock) {
+        document.querySelector('#addAmount').max = stock;
+        if (parseInt(stock) <= parseInt(stock_min)) {
+            alert(`LOW STOCK! \nStock: ${stock}`);
+        }
+    }
+}
 
 function check_consult(csrf_token, consult_id){
 
@@ -172,23 +178,6 @@ function addRow(button, consult_id, csrf_token){
             // Handle any errors that may occur during the fetch or JSON parsing
             console.error('Error:', error);
         });
-
-
-        // amountCell.innerHTML = editedAmount;
-        // descriptionCell.innerHTML = editedItem;
-        // if (observationCell){
-        //     observationCell.innerHTML = editedObservation;
-        // }
-        // else{
-        //     observationCell.innerHTML = '-';
-        // }
-        // priceCell.innerHTML = '$' + editedPrice;
-
-        // // Update the data attributes with the edited values
-        // amountCell.setAttribute('data-amount', editedAmount);
-        // descriptionCell.setAttribute('data-item', editedItem);
-        // observationCell.setAttribute('data-observation', editedObservation);
-        // priceCell.setAttribute('data-price', editedPrice);
 
         // Hide the modal
         $('#addModal').modal('hide');

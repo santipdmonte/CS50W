@@ -96,6 +96,8 @@
                                                     value="{{ item }}" 
                                                     data-item_id="{{ item.id }}" 
                                                     data-price="{{ item.price }}" 
+                                                    data-stock="{{ item.stock }}"
+                                                    data-stock_min="{{ item.stock_min }}"
                                                     data-barcode="{{ item.barcode }}">{{ item }}</option>
                                                 {% endfor %}
                                             </datalist>
