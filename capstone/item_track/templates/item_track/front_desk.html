@@ -79,33 +79,48 @@
                             <form>
                 
                                 <div class="vet-form-item">
-                
+
                                     <!-- Inputs -->
-                                    <input class="form-control mb-2" id="addBarcode" type="text" placeholder="Codebar...">
-                                    <div class="d-flex pb-2">
-                                        <input class="form-control mr-2" list="datalistOptions" id="addItem" placeholder="Type to search..." required>
-                                        <datalist id="datalistOptions">
-                                            {% for item in items %}
-                                            <option 
-                                                value="{{ item }}" 
-                                                data-item_id="{{ item.id }}" 
-                                                data-price="{{ item.price }}"
-                                                data-stock="{{ item.stock }}"
-                                                data-stock_min="{{ item.stock_min }}"
-                                            ></option>
-                                            {% endfor %}
-                                        </datalist>
-                                        <input class="form-control amount w-25" type="number" id="addAmount" name="amount" placeholder="Amount" value="1" min="1" required>
+
+                                    <div class="pb-2 d-flex">
+                                        <div class="form-floating w-25 pr-2">
+                                            <input type="email" class="form-control" id="addBarcode" placeholder="name@example.com" autofocus>
+                                            <label for="floatingInput">CodeBar:</label>
+                                        </div>
+                    
+                                        <div class="form-floating flex-grow-1">
+                                            <input class="form-control" list="datalistOptions" id="addItem" required>
+                                            <datalist class="" id="datalistOptions">
+                                                {% for item in items %}
+                                                <option 
+                                                    value="{{ item }}" 
+                                                    data-item_id="{{ item.id }}" 
+                                                    data-price="{{ item.price }}" 
+                                                    data-barcode="{{ item.barcode }}">{{ item }}</option>
+                                                {% endfor %}
+                                            </datalist>
+                                            <label for="floatingSelectGrid">Item:</label>
+                                        </div>
                                     </div>
+
                                     <input type="hidden" id="item_id">
-                                    <input class="form-control w-25 price mb-2" type="number" id="addPrice" name="price" min="0" placeholder="$Price..." required>
+
+                                    <div class="w-50 mb-2">
+                                        <label for="addPrice">Price:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="text" class="form-control" id="addPrice" disabled>
+                                        </div>
+                                    </div>
+                                        
+                                    <div class="w-25 mb-3">
+                                        <label for="addAmount">Amount</label>
+                                        <input class="form-control amount" type="number" id="addAmount" name="amount" value="1" min="1" required>
+                                    </div>
                                     
                                     <!-- Buttons -->
-                                    <div class="d-flex justify-content-between">
-                                        <button class="btn btn-secondary mb-2" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">
-                                            Observation
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-secondary mb-2" type="button" data-toggle="collapse" data-target="#observationCollapse" aria-expanded="false" aria-controls="observationCollapse">Observation</button>
+                                    
                                 </div>
                     
                                 <!-- Observation input -->

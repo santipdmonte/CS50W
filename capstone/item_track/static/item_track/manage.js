@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         inputItem_id.value = option.dataset.item_id;
         inputBarcode.value = option.dataset.barcode;
 
+        // When found the item, focus on the amount input
         if (option){
             inputAddAmount.focus();
         }
