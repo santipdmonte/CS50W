@@ -13,3 +13,12 @@ def update_transaction_total(sender, instance, **kwargs):
         total = transaction.movements.aggregate(Sum('total'))['total__sum'] or 0
         transaction.total = total
         transaction.save()
+
+@receiver(post_delete, sender=Movements)
+def update_item_stock(sender, instance, **kwargs):
+    # Verify if the movement is a sell and has an item
+    if instance.type == 'Sell' and instance.item:
+        item = instance.item
+        # Update the item stock
+        item.stock += instance.quantity
+        item.save()

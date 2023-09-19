@@ -239,7 +239,6 @@ function deleteRow(event, consult_id, csrf_token){
 
     selectedRows.forEach( row => {
         var movementId = row.getAttribute('data-id');
-        console.log(movementId);
 
         // Config DELETE fetch request
         fetch(`movement/${movementId}`, {
