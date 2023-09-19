@@ -234,7 +234,6 @@ function clickrow(event, id, consult_id){
 }
 
 function deleteRow(event, consult_id, csrf_token){
-    console.log('deleteRows');
 
     var selectedRows = document.querySelectorAll('.selected-row');
 
@@ -253,7 +252,6 @@ function deleteRow(event, consult_id, csrf_token){
         .then(response => response.json()) // Parse the JSON response
         .then(data => {
             var transaction = data.transaction;
-            console.log(transaction);
 
             // Diplay none the row
             row.style.display = 'none';
