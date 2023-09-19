@@ -36,7 +36,9 @@
                                     <table class="table">
                                         <tbody>
                                             {% for element in consult.movements.all %}
-                                                <tr id="row-{{ element.id }}" class="selectable-row" onclick="clickrow(event, '{{ element.id }}', '{{ consult.id }}')">
+                                                <tr id="row-{{ element.id }}" class="selectable-row" 
+                                                    data-id="{{ element.id }}"
+                                                    onclick="clickrow(event, '{{ element.id }}', '{{ consult.id }}')">
                                                     <td class="w-75">
                                                         <!-- Show Element -->
                                                         {{element.show}}

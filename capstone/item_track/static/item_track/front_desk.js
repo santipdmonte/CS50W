@@ -190,12 +190,28 @@ function addRow(button, consult_id, csrf_token){
     };
 };
 
-var selected_cosnult_id = null;
+
+var selected_consult_id = null;
 
 function clickrow(event, id, consult_id){
     var clickedRow = event.currentTarget;
     var columnInRow = clickedRow.querySelector('td');
     
+    // Get all the selected rows
+    var selectedRows = document.querySelectorAll('.selected-row');
+
+    // If click in a new consult delte the selected-row class
+    if (selected_consult_id != null && selected_consult_id != consult_id) {
+
+        document.querySelector(`#delete-${selected_consult_id}`).style.display = 'none';
+        
+        selectedRows.forEach(function(row) {
+            var columnInCurrentRow = row.querySelector('td');
+            columnInCurrentRow.style.backgroundColor = '';
+            row.classList.remove('selected-row');
+        });
+    }
+
     // Select the row. If the row is selected, unselect it
     if (columnInRow.style.backgroundColor === 'red') {
         columnInRow.style.backgroundColor = '';
@@ -204,24 +220,13 @@ function clickrow(event, id, consult_id){
         columnInRow.style.backgroundColor = 'red';
         clickedRow.classList.add('selected-row');
     }
+    var selectedRows = document.querySelectorAll('.selected-row');
     
-    // Get all the selected rows
-    var allRows = document.querySelectorAll('.selected-row');
-
-    // If click in a new consult delte the selected-row class
-    if (selected_cosnult_id != null && selected_cosnult_id != consult_id) {
-
-        allRows.forEach(function(row) {
-            var columnInCurrentRow = row.querySelector('td');
-            columnInCurrentRow.style.backgroundColor = '';
-            row.classList.remove('selected-row');
-        });
-    }
     // Update the consult_id of the selected row
-    selected_cosnult_id = consult_id;
+    selected_consult_id = consult_id;
 
     // Show/hide the delete button
-    if (allRows.length > 0 ){
+    if (selectedRows.length > 0 ){
         document.querySelector(`#delete-${consult_id}`).style.display = 'block';
     } else {
         document.querySelector(`#delete-${consult_id}`).style.display = 'none';
@@ -230,4 +235,42 @@ function clickrow(event, id, consult_id){
 
 function deleteRow(event, consult_id, csrf_token){
     console.log('deleteRows');
+
+    var selectedRows = document.querySelectorAll('.selected-row');
+
+    selectedRows.forEach( row => {
+        var movementId = row.getAttribute('data-id');
+        console.log(movementId);
+
+        // Config DELETE fetch request
+        fetch(`movement/${movementId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': csrf_token, 
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            var transaction = data.transaction;
+            console.log(transaction);
+
+            // Diplay none the row
+            row.style.display = 'none';
+
+            // Update the total
+            trans_total = parseFloat(transaction.total).toFixed(2);
+            document.querySelector(`#total-${consult_id}`).innerHTML = `$${(trans_total)}`;
+        })
+        .catch(function(error) {
+            // Maneja errores de red u otros errores
+            console.error('Error de red o procesamiento:', error);
+        });
+    })
+
+    // Hide the delete button
+    document.querySelector(`#delete-${consult_id}`).style.display = 'none';
+
+    // TODO If th transaction has no movements, delete the consult
+
 }

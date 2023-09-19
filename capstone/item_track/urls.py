@@ -12,4 +12,5 @@ urlpatterns = [
     path("item/barcode/<str:barcode>", views.item_by_barcode, name="barcode"),
     path("item/update/<str:item_id>", views.update_item_by_id, name="update_item_by_id"),
     path("transaction/<int:transaction_id>", views.transaction, name="transaction_id"),
+    path("movement/<int:movement_id>", views.movement, name="movement"),
 ]

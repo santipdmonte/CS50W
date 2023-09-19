@@ -181,6 +181,24 @@ def status(request):
         # 'items_json': items_json
     })
 
+def movement(request, movement_id):
+    try:
+        # Try to get the movement
+        movement = Movements.objects.get(pk=movement_id)
+        transaction = movement.TransactionRecord
+    except Movements.DoesNotExist:
+        # If the movement does not exist, return an error
+        return JsonResponse({'error': 'El movimiento no existe.'}, status=404)
+
+    if request.method == 'DELETE':
+        # If the request is DELETE, delete the movement
+        movement.delete()
+        # Return a success message
+        return JsonResponse({'message': 'El movimiento se eliminó correctamente.', 'transaction': transaction.serialize()}, status=200)
+
+    # If the request is not DELETE, return an error
+    return JsonResponse({'error': 'Método no permitido.'}, status=405)
+
 
 def create_item(request):
     if request.method == "POST":
