@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .models import User, Item, Client, Category, Treatment, TransactionRecord, Movemets
+from .models import User, Item, Client, Category, Treatment, TransactionRecord, Movements
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -54,7 +54,7 @@ def front_desk(request):
             # TODO add restriction to stock
             
             # Create Movements and add to transaction
-            movement = Movemets(
+            movement = Movements(
                         item = item,
                         quantity = data['amount'],
                         price = data['price'],
@@ -104,7 +104,7 @@ def transaction(request):
             for movement in data[1:]:
                 treatment = Treatment.objects.get(id=movement['treatment_id'])
 
-                movement = Movemets(
+                movement = Movements(
                     treatment = treatment,
                     quantity = movement['amount'],
                     price = movement['price'],
@@ -156,7 +156,7 @@ def update_item_by_id(request, item_id):
 
             # Create Movement
             if int(data['itemAmount']) > 0:
-                movement = Movemets(
+                movement = Movements(
                     item = item,
                     quantity = data['itemAmount'],
                     price = Decimal(data['itemPrice']),
