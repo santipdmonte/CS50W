@@ -19,11 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
             inputPrice.value = '';
         }
     });
-
-    // document.querySelector('#add_btn').addEventListener('click', (event) => {
-    //     // Save as value the treatment_id
-    //     inputTreatment_id.value = option.dataset.treatment_id;
-    // });
 });
 
 // JavaScript to add the form to the table
@@ -36,7 +31,6 @@ function addRow() {
     var treatment_id = document.getElementById('treatment_id').value;
 
     // Create a new row in the table
-    // var table = document.getElementById('table');
     var table = document.querySelector('#table tbody');
     var row = table.insertRow();
 
@@ -49,7 +43,7 @@ function addRow() {
 
     amountCell.innerHTML = amount;
     descriptionCell.innerHTML = treatment;
-    if (!observation){
+    if (!observation || observation == ''){
     observationCell.innerHTML = '-';
     }
     else{

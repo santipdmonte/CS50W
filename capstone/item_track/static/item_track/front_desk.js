@@ -216,9 +216,12 @@ function clickrow(event, id, consult_id){
     if (clickedRow.classList.contains('selected-row')) {
         columnInRow.style.backgroundColor = '';
         clickedRow.classList.remove('selected-row');
+        clickedRow.classList.remove('font-weight-bold');
     } else {
-        columnInRow.style.backgroundColor = 'red';
+        columnInRow.style.backgroundColor = '#CD5C5C';
         clickedRow.classList.add('selected-row');
+        clickedRow.classList.add('font-weight-bold');
+
     }
     var selectedRows = document.querySelectorAll('.selected-row');
     
