@@ -168,7 +168,7 @@ function addRow(button, consult_id, csrf_token){
             }
 
             var newElementHTML = `
-                <tr>
+                <tr id="row-${element.item.id}" data-id="${element.item.id}" class="selectable-row" onclick="clickrow(event, ${element.item.id}, ${transaction.id})">
                     <td>${show_amount} ${element.item.name} ${show_observation}</td>
                     <td>$${(element.item.price * amount).toFixed(2)}</td>
                 </tr>
