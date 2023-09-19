@@ -65,9 +65,6 @@ def front_desk(request):
                     )
             movement.save()
 
-            transaction.total += movement.total
-            transaction.save()
-
             # return transaction.serialize()
             return JsonResponse({'message': 'Datos procesados correctamente', 'transaction': transaction.serialize()})
         except json.JSONDecodeError:
@@ -183,6 +180,7 @@ def status(request):
         'items': items,
         # 'items_json': items_json
     })
+
 
 def create_item(request):
     if request.method == "POST":

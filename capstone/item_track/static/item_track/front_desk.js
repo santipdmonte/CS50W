@@ -176,7 +176,8 @@ function addRow(button, consult_id, csrf_token){
             lastRow.insertAdjacentHTML('beforebegin', newElementHTML);
 
             // Update the total
-            document.querySelector(`#total-${consult_id}`).innerHTML = transaction.total;
+            trans_total = parseFloat(transaction.total).toFixed(2);
+            document.querySelector(`#total-${consult_id}`).innerHTML = `$${(trans_total)}`;
             
         })
         .catch(error => {
