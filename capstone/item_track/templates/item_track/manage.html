@@ -24,7 +24,12 @@
                         <input class="form-control" list="datalistOptions" id="addItem" required>
                         <datalist class="" id="datalistOptions">
                             {% for item in items %}
-                            <option value="{{ item }}" data-item_id="{{ item.id }}" data-price="{{ item.price }}" data-barcode="{{ item.barcode }}">{{ item }}</option>
+                            <option 
+                                value="{{ item }}" 
+                                data-item_id="{{ item.id }}" 
+                                data-price="{{ item.price }}" 
+                                data-barcode="{{ item.barcode }}"
+                                data-stock="{{ item.stock }}">{{ item }}</option>
                             {% endfor %}
                         </datalist>
                         <label for="floatingSelectGrid">Item:</label>
@@ -33,11 +38,17 @@
 
                 <input type="hidden" id="item_id">
                 
-                <div class="w-50 mb-3 mr-4">
-                    <label for="addPrice">Price:</label>
-                    <div class="input-group">
-                        <span class="input-group-text">$</span>
-                        <input type="text" class="form-control" id="addPrice" required>
+                <div class="mb-3 d-flex">
+                    <div class="mr-3">
+                        <label for="addPrice">Price:</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="text" class="form-control" id="addPrice" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="currentStock">Current stock:</label>
+                        <input type="text" class="form-control" id="currentStock" disabled>
                     </div>
                 </div>
 
