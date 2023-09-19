@@ -213,7 +213,7 @@ function clickrow(event, id, consult_id){
     }
 
     // Select the row. If the row is selected, unselect it
-    if (columnInRow.style.backgroundColor === 'red') {
+    if (clickedRow.classList.contains('selected-row')) {
         columnInRow.style.backgroundColor = '';
         clickedRow.classList.remove('selected-row');
     } else {
